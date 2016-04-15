@@ -20,6 +20,12 @@ import org.appcelerator.titanium.view.TiCompositeLayout;
 import org.appcelerator.titanium.view.TiCompositeLayout.LayoutArrangement;
 import org.appcelerator.titanium.view.TiUIView;
 
+/* das sind genau die Vorschläge derID, die generieren die not used warning*/
+import com.pheelicks.utils.*;
+import com.pheelicks.visualizer.*;
+import com.pheelicks.visualizer.renderer.*;
+
+
 import android.app.Activity;
 
 // This proxy can be created by calling Audiovisualizerview.createExample({message: "hello world"})
