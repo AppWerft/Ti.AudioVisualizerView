@@ -20,7 +20,7 @@ import org.appcelerator.titanium.view.TiCompositeLayout;
 import org.appcelerator.titanium.view.TiCompositeLayout.LayoutArrangement;
 import org.appcelerator.titanium.view.TiUIView;
 
-/* das sind genau die Vorschläge derID, die generieren die not used warning*/
+/* these are the proposals of ID: */
 import com.pheelicks.utils.*;
 import com.pheelicks.visualizer.*;
 import com.pheelicks.visualizer.renderer.*;
