@@ -24,7 +24,22 @@ import org.appcelerator.titanium.view.TiUIView;
 import com.pheelicks.utils.*;
 import com.pheelicks.visualizer.*;
 import com.pheelicks.visualizer.renderer.*;
+/*   
+ * 
+ *  [javac] ~/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/src/ti/audiovisualizerview/VisualizerViewProxy.java:24: error: package com.pheelicks.utils does not exist
+    [javac] import com.pheelicks.utils.*;
+    [javac] ^
+    [javac] ~/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/src/ti/audiovisualizerview/VisualizerViewProxy.java:25: error: package com.pheelicks.visualizer does not exist
+    [javac] import com.pheelicks.visualizer.*;
+    [javac] ^
+    [javac] ~/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/src/ti/audiovisualizerview/VisualizerViewProxy.java:26: error: package com.pheelicks.visualizer.renderer does not exist
+    [javac] import com.pheelicks.visualizer.renderer.*;
+    [javac] ^
+    [javac] Note: [KrollBindingGen] Generating JSON: file:/Users/fuerst/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/build/generated/json/org/appcelerator/titanium/bindings/audiovisualizerview.json
 
+ * 
+ * 
+ */
 
 import android.app.Activity;
 
