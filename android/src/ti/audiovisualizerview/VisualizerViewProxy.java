@@ -9,37 +9,20 @@
 package ti.audiovisualizerview;
 
 import org.appcelerator.kroll.KrollDict;
-import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.Log;
+
 import org.appcelerator.titanium.TiC;
-import org.appcelerator.titanium.util.Log;
-import org.appcelerator.titanium.util.TiConfig;
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiCompositeLayout;
 import org.appcelerator.titanium.view.TiCompositeLayout.LayoutArrangement;
 import org.appcelerator.titanium.view.TiUIView;
 
-/* these are the proposals of ID: */
+
 import com.pheelicks.utils.*;
 import com.pheelicks.visualizer.*;
 import com.pheelicks.visualizer.renderer.*;
-/*   
- * 
- *  [javac] ~/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/src/ti/audiovisualizerview/VisualizerViewProxy.java:24: error: package com.pheelicks.utils does not exist
-    [javac] import com.pheelicks.utils.*;
-    [javac] ^
-    [javac] ~/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/src/ti/audiovisualizerview/VisualizerViewProxy.java:25: error: package com.pheelicks.visualizer does not exist
-    [javac] import com.pheelicks.visualizer.*;
-    [javac] ^
-    [javac] ~/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/src/ti/audiovisualizerview/VisualizerViewProxy.java:26: error: package com.pheelicks.visualizer.renderer does not exist
-    [javac] import com.pheelicks.visualizer.renderer.*;
-    [javac] ^
-    [javac] Note: [KrollBindingGen] Generating JSON: file:/Users/fuerst/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/build/generated/json/org/appcelerator/titanium/bindings/audiovisualizerview.json
-
- * 
- * 
- */
 
 import android.app.Activity;
 
@@ -97,21 +80,4 @@ public class VisualizerViewProxy extends TiViewProxy {
 		}
 	}
 
-	// Methods
-	@Kroll.method
-	public void printMessage(String message) {
-		Log.d(LCAT, "printing message: " + message);
-	}
-
-	@Kroll.getProperty
-	@Kroll.method
-	public String getMessage() {
-		return "Hello World from my module";
-	}
-
-	@Kroll.setProperty
-	@Kroll.method
-	public void setMessage(String message) {
-		Log.d(LCAT, "Tried setting module message to: " + message);
-	}
 }
