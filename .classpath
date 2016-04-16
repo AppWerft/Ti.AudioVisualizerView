@@ -13,6 +13,6 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/fuerst/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/lib/com.pheelicks.jar"/>
+	<classpathentry kind="lib" path="/Users/fuerst/Documents/APPC_WORKSPACE/Ti.AudioVisualizerView/android/lib/com"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

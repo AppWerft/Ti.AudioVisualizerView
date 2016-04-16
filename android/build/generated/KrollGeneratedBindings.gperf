@@ -1,0 +1,18 @@
+%define lookup-function-name lookupGeneratedInit
+%define class-name AudiovisualizerviewBindings
+%{
+
+#include <string.h>
+#include <v8.h>
+#include <KrollBindings.h>
+
+#include "ti.audiovisualizerview.AudiovisualizerviewModule.h"
+#include "ti.audiovisualizerview.VisualizerViewProxy.h"
+
+
+%}
+struct titanium::bindings::BindEntry;
+%%
+ti.audiovisualizerview.AudiovisualizerviewModule, ::ti::audiovisualizerview::AudiovisualizerviewModule::bindProxy, ::ti::audiovisualizerview::AudiovisualizerviewModule::dispose
+ti.audiovisualizerview.VisualizerViewProxy, ::ti::audiovisualizerview::audiovisualizerview::VisualizerViewProxy::bindProxy, ::ti::audiovisualizerview::audiovisualizerview::VisualizerViewProxy::dispose
+%%
