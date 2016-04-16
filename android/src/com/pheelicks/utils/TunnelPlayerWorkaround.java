@@ -14,59 +14,71 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.util.Log;
 
+// https://gist.github.com/pec1985/5847653
+import org.appcelerator.titanium.util.TiRHelper;
+import org.appcelerator.titanium.util.TiRHelper.ResourceNotFoundException;
+
 //import com.pheelicks.visualizer.R;
 
 public class TunnelPlayerWorkaround {
-  private static final String TAG = "TunnelPlayerWorkaround";
 
-  private static final String SYSTEM_PROP_TUNNEL_DECODE_ENABLED = "tunnel.decode";
+	public static int getRaw(String str) {
+		try {
+			return TiRHelper.getApplicationResource("raw." + str);
+		} catch (ResourceNotFoundException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
 
-  private TunnelPlayerWorkaround()
-  {
-  }
+	private static final String TAG = "TunnelPlayerWorkaround";
 
-  /**
-   * Obtain "tunnel.decode" system property value
-   * 
-   * @param context Context
-   * @return Whether tunnel player is enabled
-   */
-  public static boolean isTunnelDecodeEnabled(Context context)
-  {
-    return SystemPropertiesProxy.getBoolean(
-        context, SYSTEM_PROP_TUNNEL_DECODE_ENABLED, false);
-  }
+	private static final String SYSTEM_PROP_TUNNEL_DECODE_ENABLED = "tunnel.decode";
 
-  /**
-   * Create silent MediaPlayer instance to avoid tunnel player issue
-   * 
-   * @param context Context
-   * @return MediaPlayer instance
-   */
-  public static MediaPlayer createSilentMediaPlayer(Context context)
-  {
-    boolean result = false;
+	private TunnelPlayerWorkaround() {
+	}
 
-    MediaPlayer mp = null;
-    try {
-     // mp = MediaPlayer.create(context, R.raw.workaround_1min);
-      mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+	/**
+	 * Obtain "tunnel.decode" system property value
+	 * 
+	 * @param context
+	 *            Context
+	 * @return Whether tunnel player is enabled
+	 */
+	public static boolean isTunnelDecodeEnabled(Context context) {
+		return SystemPropertiesProxy.getBoolean(context,
+				SYSTEM_PROP_TUNNEL_DECODE_ENABLED, false);
+	}
 
-      // NOTE: start() is no needed
-      // mp.start();
+	/**
+	 * Create silent MediaPlayer instance to avoid tunnel player issue
+	 * 
+	 * @param context
+	 *            Context
+	 * @return MediaPlayer instance
+	 */
+	public static MediaPlayer createSilentMediaPlayer(Context context) {
+		boolean result = false;
+		MediaPlayer mp = null;
+		try {
+			// mp = MediaPlayer.create(context, R.raw.workaround_1min);
+			mp = MediaPlayer.create(context, getRaw("workaround_1min"));
+			mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			// NOTE: start() is no needed
+			mp.start();
 
-      result = true;
-    } catch (RuntimeException e) {
-      Log.e(TAG, "createSilentMediaPlayer()", e);
-    } finally {
-      if (!result && mp != null) {
-        try {
-          mp.release();
-        } catch (IllegalStateException e) {
-        }
-      }
-    }
+			result = true;
+		} catch (RuntimeException e) {
+			Log.e(TAG, "createSilentMediaPlayer()", e);
+		} finally {
+			if (!result && mp != null) {
+				try {
+					mp.release();
+				} catch (IllegalStateException e) {
+				}
+			}
+		}
 
-    return mp;
-  }
+		return mp;
+	}
 }
