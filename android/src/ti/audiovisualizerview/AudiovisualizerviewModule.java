@@ -16,6 +16,16 @@ import org.appcelerator.kroll.common.Log;
 
 @Kroll.module(name = "Audiovisualizerview", id = "ti.audiovisualizerview")
 public class AudiovisualizerviewModule extends KrollModule {
+	@Kroll.constant
+	public static final int AUDIOSESSION_OUTPUTMIX = 0;
+	@Kroll.constant
+	public static final int TYPE_BAR = 0;
+	@Kroll.constant
+	public static final int TYPE_CIRCLE = 1;
+	@Kroll.constant
+	public static final int TYPE_CIRCLEBAR = 2;
+	@Kroll.constant
+	public static final int TYPE_LINE = 3;
 	private static final String LCAT = "AudiovisualizerviewModule";
 	public AudiovisualizerviewModule() {
 		super();

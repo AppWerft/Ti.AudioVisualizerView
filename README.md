@@ -16,8 +16,10 @@ var Visualizer = require('ti.audiovisualizerview');
 
 var window = Ti.Ui.createWindow();
 window.add(Visualizer.createVisualizerView({
-    audioID : 0  // for mixer output
+    audioSessionId : Visualizer.AUDIOSESSION_OUTPUTMIX  // for mixer output
+    renderType : Visualizer.TYPE_BAR
 }));
 window.open();
-
 ~~~
+
+Possible types are TYPE_BAR, TYPE_CIRCLE, TYPE_CIRCLEBAR, TYPE_LINE.
