@@ -98,6 +98,23 @@ Handle<FunctionTemplate> AudiovisualizerviewModule::getProxyTemplate()
 		titanium::Proxy::setIndexedProperty);
 
 	// Constants --------------------------------------------------------------
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		LOGE(TAG, "Failed to get environment in AudiovisualizerviewModule");
+		//return;
+	}
+
+
+		DEFINE_INT_CONSTANT(prototypeTemplate, "TYPE_CIRCLEBAR", 2);
+
+		DEFINE_INT_CONSTANT(prototypeTemplate, "TYPE_CIRCLE", 1);
+
+		DEFINE_INT_CONSTANT(prototypeTemplate, "AUDIOSESSION_OUTPUTMIX", 0);
+
+		DEFINE_INT_CONSTANT(prototypeTemplate, "TYPE_LINE", 3);
+
+		DEFINE_INT_CONSTANT(prototypeTemplate, "TYPE_BAR", 0);
+
 
 	// Dynamic properties -----------------------------------------------------
 

@@ -12,7 +12,6 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 
-import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiCompositeLayout;
@@ -20,17 +19,27 @@ import org.appcelerator.titanium.view.TiCompositeLayout.LayoutArrangement;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
 
-import com.pheelicks.utils.*;
-import com.pheelicks.visualizer.*;
-import com.pheelicks.visualizer.renderer.*;
+import com.pheelicks.utils.TunnelPlayerWorkaround;
+//import com.pheelicks.visualizer.R;
+
+import com.pheelicks.visualizer.renderer.BarGraphRenderer;
+import com.pheelicks.visualizer.renderer.CircleBarRenderer;
+import com.pheelicks.visualizer.renderer.CircleRenderer;
+import com.pheelicks.visualizer.renderer.LineRenderer;
+import com.pheelicks.visualizer.VisualizerView;
 
 import android.app.Activity;
+import android.view.View;
+import android.view.LayoutInflater;
 import android.content.res.*;
 
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
 public class VisualizerViewProxy extends TiViewProxy {
+	
+	VisualizerView  visualizerView;
 	// Standard Debugging variables
 	private static final String LCAT = "AVView";
+	
 	public int audioSessionId =0;
 	public int renderType =0;
 
@@ -42,11 +51,12 @@ public class VisualizerViewProxy extends TiViewProxy {
 		super();
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
+		Log.d(LCAT,"inside VisualizerViewProxy");
 	}
 
 	@Override
 	public TiUIView createView(Activity activity) {
-		TiUIView view = new VisualizerView(this);
+		TiUIView view = new VisualizerImageView(this);
 		view.getLayoutParams().autoFillsHeight = true;
 		view.getLayoutParams().autoFillsWidth = true;
 		return view;
@@ -59,22 +69,22 @@ public class VisualizerViewProxy extends TiViewProxy {
 		// https://github.com/m1ga/com.miga.gifview/blob/master/android/src/com/miga/tigifview/GifViewProxy.java#L106-L116
 
 	}
-
-	private class VisualizerView extends TiUIView {
-		
-		public VisualizerView(final TiViewProxy proxy) {
+	private class VisualizerImageView extends TiUIView {
+		public VisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
 			String packageName = proxy.getActivity().getPackageName();
+			Log.d(LCAT,packageName);
 			Resources resources = proxy.getActivity().getResources();
-			
-			LayoutArrangement arrangement = LayoutArrangement.DEFAULT; // http://docs.appcelerator.com/module-apidoc/latest/android/index.html?org/appcelerator/titanium/view/TiCompositeLayout.LayoutArrangement.html
-			/*
-			 * In Titanium module we can convert native controls into Titanium
-			 * view using setNativeView method. setNativeView sets the
-			 * nativeView to view.
-			 */
-			setNativeView(new TiCompositeLayout(proxy.getActivity(),
-					arrangement));
+			View videoWrapper;
+            int resId_videoHolder = -1;
+            int resId_video       = -1;
+
+            resId_videoHolder = resources.getIdentifier("layout", "layout", packageName);
+            resId_video       = resources.getIdentifier("gifImageView", "id", packageName);
+            LayoutInflater inflater     = LayoutInflater.from(getActivity());
+            videoWrapper = inflater.inflate(resId_videoHolder, null);
+            visualizerView   = (VisualizerView)videoWrapper.findViewById(resId_video);
+    		LayoutArrangement arrangement = LayoutArrangement.DEFAULT; // http://docs.appcelerator.com/module-apidoc/latest/android/index.html?org/appcelerator/titanium/view/TiCompositeLayout.LayoutArrangement.html
 		}
 
 		@Override
@@ -86,8 +96,6 @@ public class VisualizerViewProxy extends TiViewProxy {
             	renderType = TiConvert.toInt(props, "renderType");
             }
 			super.processProperties(props);
-			
 		}
 	}
-
 }
