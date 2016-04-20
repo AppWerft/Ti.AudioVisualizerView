@@ -33,15 +33,20 @@ import android.view.View;
 import android.view.LayoutInflater;
 import android.content.res.*;
 
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
 public class VisualizerViewProxy extends TiViewProxy {
-	
-	VisualizerView  visualizerView;
+
+	VisualizerView visualizerView;
 	// Standard Debugging variables
-	private static final String LCAT = "AVView";
-	
-	public int audioSessionId =0;
-	public int renderType =0;
+	private static final String LCAT = "Pheelicks";
+
+	public int audioSessionId = 0;
+	public int renderType = 0;
 
 	TiApplication appContext;
 	Activity activity;
@@ -51,7 +56,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 		super();
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
-		Log.d(LCAT,"inside VisualizerViewProxy");
+		Log.d(LCAT, "inside VisualizerViewProxy");
 	}
 
 	@Override
@@ -69,32 +74,94 @@ public class VisualizerViewProxy extends TiViewProxy {
 		// https://github.com/m1ga/com.miga.gifview/blob/master/android/src/com/miga/tigifview/GifViewProxy.java#L106-L116
 
 	}
+
 	private class VisualizerImageView extends TiUIView {
+		// Methods for adding renderers to visualizer
+		private void addBarGraphRenderers() {
+			Paint paint = new Paint();
+			paint.setStrokeWidth(50f);
+			paint.setAntiAlias(true);
+			paint.setColor(Color.argb(200, 56, 138, 252));
+			BarGraphRenderer barGraphRendererBottom = new BarGraphRenderer(16,
+					paint, false);
+			visualizerView.addRenderer(barGraphRendererBottom);
+
+			Paint paint2 = new Paint();
+			paint2.setStrokeWidth(12f);
+			paint2.setAntiAlias(true);
+			paint2.setColor(Color.argb(200, 181, 111, 233));
+			BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(4,
+					paint2, true);
+			visualizerView.addRenderer(barGraphRendererTop);
+		}
+
+		private void addCircleBarRenderer() {
+			Paint paint = new Paint();
+			paint.setStrokeWidth(8f);
+			paint.setAntiAlias(true);
+			paint.setXfermode(new PorterDuffXfermode(Mode.LIGHTEN));
+			paint.setColor(Color.argb(255, 222, 92, 143));
+			CircleBarRenderer circleBarRenderer = new CircleBarRenderer(paint,
+					32, true);
+			visualizerView.addRenderer(circleBarRenderer);
+		}
+
+		private void addCircleRenderer() {
+			Paint paint = new Paint();
+			paint.setStrokeWidth(3f);
+			paint.setAntiAlias(true);
+			paint.setColor(Color.argb(255, 222, 92, 143));
+			CircleRenderer circleRenderer = new CircleRenderer(paint, true);
+			visualizerView.addRenderer(circleRenderer);
+		}
+
+		private void addLineRenderer() {
+			Paint linePaint = new Paint();
+			linePaint.setStrokeWidth(1f);
+			linePaint.setAntiAlias(true);
+			linePaint.setColor(Color.argb(88, 0, 128, 255));
+
+			Paint lineFlashPaint = new Paint();
+			lineFlashPaint.setStrokeWidth(5f);
+			lineFlashPaint.setAntiAlias(true);
+			lineFlashPaint.setColor(Color.argb(188, 255, 255, 255));
+			LineRenderer lineRenderer = new LineRenderer(linePaint,
+					lineFlashPaint, true);
+			visualizerView.addRenderer(lineRenderer);
+		}
+
 		public VisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
 			String packageName = proxy.getActivity().getPackageName();
-			Log.d(LCAT,packageName);
+			Log.d(LCAT, "packageName=" + packageName);
 			Resources resources = proxy.getActivity().getResources();
-			View videoWrapper;
-            int resId_videoHolder = -1;
-            int resId_video       = -1;
-
-            resId_videoHolder = resources.getIdentifier("layout", "layout", packageName);
-            resId_video       = resources.getIdentifier("gifImageView", "id", packageName);
-            LayoutInflater inflater     = LayoutInflater.from(getActivity());
-            videoWrapper = inflater.inflate(resId_videoHolder, null);
-            visualizerView   = (VisualizerView)videoWrapper.findViewById(resId_video);
-    		LayoutArrangement arrangement = LayoutArrangement.DEFAULT; // http://docs.appcelerator.com/module-apidoc/latest/android/index.html?org/appcelerator/titanium/view/TiCompositeLayout.LayoutArrangement.html
+			View visualizerWrapper;
+			int resId_visualizerContainer = -1;
+			int resId_visualizer = -1;
+			resId_visualizerContainer = resources.getIdentifier("main",
+					"layout", packageName);
+			Log.d(LCAT, "resId_visualizerContainer=" + resId_visualizerContainer);
+			resId_visualizer = resources.getIdentifier("visualizerView", "id",
+					packageName);
+			Log.d(LCAT, "resId_visualizer=" +resId_visualizer );
+			LayoutInflater inflater = LayoutInflater.from(getActivity());
+			visualizerWrapper = inflater.inflate(resId_visualizerContainer, null);
+			visualizerView = (VisualizerView) visualizerWrapper
+					.findViewById(resId_visualizer);
+			visualizerView.link(0); // binding to mixerouts
+			addCircleRenderer(); 
+			addLineRenderer();
+			Log.d(LCAT, "addLineRenderer");
 		}
 
 		@Override
 		public void processProperties(KrollDict props) {
-            if (props.containsKey("audioSessionId")) {
-            	audioSessionId = TiConvert.toInt(props, "audioSessionId");
-            }
-            if (props.containsKey("renderType")) {
-            	renderType = TiConvert.toInt(props, "renderType");
-            }
+			if (props.containsKey("audioSessionId")) {
+				audioSessionId = TiConvert.toInt(props, "audioSessionId");
+			}
+			if (props.containsKey("renderType")) {
+				renderType = TiConvert.toInt(props, "renderType");
+			}
 			super.processProperties(props);
 		}
 	}

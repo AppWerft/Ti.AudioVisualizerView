@@ -19,10 +19,11 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
+
 import android.media.audiofx.Visualizer;
 import android.util.AttributeSet;
 import android.view.View;
+import android.util.Log;
 
 import com.pheelicks.visualizer.renderer.Renderer;
 
@@ -32,8 +33,8 @@ import com.pheelicks.visualizer.renderer.Renderer;
  * {@link Visualizer.OnDataCaptureListener#onFftDataCapture }
  */
 public class VisualizerView extends View {
-	private static final String TAG = "VisualizerView";
-
+	private static final String LTAG = "Pheelicks";
+	
 	private byte[] mBytes;
 	private byte[] mFFTBytes;
 	private Rect mRect = new Rect();
@@ -47,6 +48,7 @@ public class VisualizerView extends View {
 	public VisualizerView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs);
 		init();
+		Log.d(LTAG,"VisualizerView");
 	}
 
 	public VisualizerView(Context context, AttributeSet attrs) {
@@ -67,8 +69,9 @@ public class VisualizerView extends View {
 																// quickly the
 																// image fades
 		mFadePaint.setXfermode(new PorterDuffXfermode(Mode.MULTIPLY));
-
+		
 		mRenderers = new HashSet<Renderer>();
+		Log.d(LTAG,"Init");
 	}
 
 	/**
@@ -78,8 +81,12 @@ public class VisualizerView extends View {
 	 *            - audioSessionId, 0 if mixer out
 	 */
 	public void link(int audioSessionId) {
+		Log.d(LTAG,"link audioSessionId " + audioSessionId);
 		// Create the Visualizer object and attach it to our media player.
 		mVisualizer = new Visualizer(audioSessionId);
+		
+		Log.d(LTAG,"successfull visualizer linked on audioSessionId" + audioSessionId);
+		
 		mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
 
 		// Pass through Visualizer data to VisualizerView
@@ -102,12 +109,12 @@ public class VisualizerView extends View {
 
 		// Enabled Visualizer and disable when we're done with the stream
 		mVisualizer.setEnabled(true);
-		player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+		/*player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mediaPlayer) {
 				mVisualizer.setEnabled(false);
 			}
-		});
+		});*/
 	}
 
 	public void addRenderer(Renderer renderer) {

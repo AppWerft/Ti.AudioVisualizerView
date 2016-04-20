@@ -26,7 +26,7 @@ public class AudiovisualizerviewModule extends KrollModule {
 	public static final int TYPE_CIRCLEBAR = 2;
 	@Kroll.constant
 	public static final int TYPE_LINE = 3;
-	private static final String LCAT = "AudiovisualizerviewModule";
+	private static final String LCAT = "Pheelicks";
 	public AudiovisualizerviewModule() {
 		super();
 	}
