@@ -12,7 +12,6 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 
-import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
@@ -43,8 +42,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 
 	private static final String LCAT = "Pheelicks";
 	final public int DEFAULT_AUDIOSESSION = 0;
-
-	
 
 	// Constructor
 	public VisualizerViewProxy() {
@@ -95,7 +92,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 		linePaint.setStrokeWidth(1f);
 		linePaint.setAntiAlias(true);
 		linePaint.setColor(Color.argb(88, 0, 128, 255));
-
 		Paint lineFlashPaint = new Paint();
 		lineFlashPaint.setStrokeWidth(5f);
 		lineFlashPaint.setAntiAlias(true);
@@ -103,7 +99,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 		LineRenderer lineRenderer = new LineRenderer(linePaint, lineFlashPaint,
 				true);
 		visualizerView.addRenderer(lineRenderer);
-
 	}
 	@Kroll.method
 	public void addCircleRenderer() {
@@ -134,7 +129,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 		BarGraphRenderer barGraphRendererBottom = new BarGraphRenderer(16,
 				paint, false);
 		visualizerView.addRenderer(barGraphRendererBottom);
-
 		Paint paint2 = new Paint();
 		paint2.setStrokeWidth(12f);
 		paint2.setAntiAlias(true);
