@@ -112,8 +112,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 					.findViewById(res.getIdentifier("visualizerView", "id",
 							packageName));
 			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
-			HashMap<String, String> args = new HashMap<String, String>();
-			callThisCallbackDirectly(args);
+			callThisCallbackDirectly(new HashMap<String, String>());
 			addLineRenderer();
 		}
 
