@@ -44,8 +44,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 	private static final String LCAT = "Pheelicks";
 	final public int DEFAULT_AUDIOSESSION = 0;
 
-	public int audioSessionId = 0;
-	public int renderType = 0;
+	
 
 	// Constructor
 	public VisualizerViewProxy() {
@@ -82,18 +81,11 @@ public class VisualizerViewProxy extends TiViewProxy {
 					.findViewById(res.getIdentifier("visualizerView", "id",
 							packageName));
 			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
-			addCircleRenderer();
-			addLineRenderer();
+			
 		}
 
 		@Override
 		public void processProperties(KrollDict props) {
-			if (props.containsKey("audioSessionId")) {
-				audioSessionId = TiConvert.toInt(props, "audioSessionId");
-			}
-			if (props.containsKey("renderType")) {
-				renderType = TiConvert.toInt(props, "renderType");
-			}
 			super.processProperties(props);
 		}
 	}
