@@ -23,7 +23,11 @@ Usage:
         visualizerView.addLineRenderer();
         visualizerView.addCircleBarRenderer();
         visualizerView.addCircleRenderer();
-        visualizerView.addBarGraphRenderers();
+        visualizerView.addBarGraphRenderers({
+            color : "#800000ff",
+            bars  : 12,
+            direction : 'top'
+        });
     });
     window.add(visualizerView);
     Ti.Media.createAudioPlayer({

@@ -87,11 +87,10 @@ public class VisualizerViewProxy extends TiViewProxy {
 							packageName));
 			setNativeView(visualizerContainer);
 			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
-			if (proxy.hasListeners("onready")) {
-				proxy.fireEvent("onready", new KrollDict());
+			if (proxy.hasListeners("ready")) {
+				proxy.fireEvent("ready", new KrollDict());
 			}
-			addBarGraphRenderers();
-			addLineRenderer();
+			
 		}
 
 		@Override
