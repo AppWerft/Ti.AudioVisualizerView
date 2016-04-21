@@ -42,4 +42,4 @@ For usage in Marshmellow devices, you need AUDIO_RECORDING permission on runtime
 }();
 ~~~
 
-The optional audioSessionId 0 means you want visualize the mixer out. In other cases you need the ID. The standard mediaPlayer doesn't gives you this ID.  
+The optional audioSessionId 0 means you want visualize the mixer out. In other cases you need the ID. The standard mediaPlayer doesn't gives you this ID. There is a JIRA ticket: https://jira.appcelerator.org/browse/AC-3538 
