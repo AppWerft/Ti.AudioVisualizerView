@@ -15,9 +15,12 @@ Usage:
 ! function() {
     var Visualizer = require('ti.audiovisualizerview');
     var window = Ti.Ui.createWindow();
-    var visualizerView = Visualizer.createVisualizerView();
+    var visualizerView = Visualizer.createVisualizerView({
+        onready : function() {
+            visualizerView.addLineRenderer();
+        }
+    });
     window.add(visualizerView);
-    visualizerView.addLineRenderer();
     Ti.Media.createAudioPlayer({
         url : "http://audio.scdn.arkena.com/11016/fip-midfi128.mp3"
     }).start();
