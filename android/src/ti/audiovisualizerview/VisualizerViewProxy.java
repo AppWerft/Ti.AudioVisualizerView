@@ -17,8 +17,6 @@ import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
 
-
-
 import com.pheelicks.visualizer.renderer.BarGraphRenderer;
 import com.pheelicks.visualizer.renderer.CircleBarRenderer;
 import com.pheelicks.visualizer.renderer.CircleRenderer;
@@ -36,7 +34,8 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 
-@Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class, propertyAccessors = { "top", "width", "height","onload" })
+@Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class, propertyAccessors = {
+		"top", "width", "height", "onload" })
 public class VisualizerViewProxy extends TiViewProxy {
 
 	// instance of pheelicks view
@@ -62,34 +61,37 @@ public class VisualizerViewProxy extends TiViewProxy {
 		view.getLayoutParams().autoFillsWidth = true;
 		return view;
 	}
+
 	@Kroll.method
 	public void callThisCallbackDirectlyifViewisready(HashMap args) {
-		// By specifying an explicit argument type in the method declaration (rather
-		// than a generic Object array), the argument type has already been validated
-		
+		// By specifying an explicit argument type in the method declaration
+		// (rather
+		// than a generic Object array), the argument type has already been
+		// validated
+
 		KrollFunction callback = null;
 		Object object = args.get("onready");
 		if (object instanceof KrollFunction) {
-			callback = (KrollFunction)object;
+			callback = (KrollFunction) object;
 		}
-		
-		
 
-		// Our callback will be passed 2 arguments: the value of the data property
+		// Our callback will be passed 2 arguments: the value of the data
+		// property
 		// from the dictionary passed in and a fixed string
-		
 
 		if (callback != null) {
-			// The 'callSync' method of the KrollCallback object can be used to directly 
-			// call the associated JavaScript function and get a return value. In this
+			// The 'callSync' method of the KrollCallback object can be used to
+			// directly
+			// call the associated JavaScript function and get a return value.
+			// In this
 			// instance there is no return value for the callback.
-			Object[] arrayOfValues = new Object[]{  };
-			callback.call(getKrollObject(),arrayOfValues);
+			Object[] arrayOfValues = new Object[] {};
+			callback.call(getKrollObject(), arrayOfValues);
 
-			//Log.d(TAG,"[KROLLDEMO] callback was called");
+			// Log.d(TAG,"[KROLLDEMO] callback was called");
 		}
-	}	
-	
+	}
+
 	// Handle creation options
 	@Override
 	public void handleCreationDict(KrollDict options) {
@@ -107,17 +109,16 @@ public class VisualizerViewProxy extends TiViewProxy {
 			Resources res = proxy.getActivity().getResources();
 			View visualizerContainer;
 			LayoutInflater inflater = LayoutInflater.from(getActivity());
-			
-			
+
 			visualizerContainer = inflater.inflate(
 					res.getIdentifier("main", "layout", packageName), null);
 			visualizerView = (VisualizerView) visualizerContainer
 					.findViewById(res.getIdentifier("visualizerView", "id",
 							packageName));
-			
 			setNativeView(visualizerContainer);
 			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
 			callThisCallbackDirectlyifViewisready(new HashMap<String, String>());
+			addBarGraphRenderers();
 			addLineRenderer();
 		}
 
@@ -129,7 +130,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 
 	@Kroll.method
 	public void addLineRenderer() {
-		Log.d(LCAT,"Info: addLineRenderer started");
 		Paint linePaint = new Paint();
 		linePaint.setStrokeWidth(1f);
 		linePaint.setAntiAlias(true);
@@ -142,7 +142,8 @@ public class VisualizerViewProxy extends TiViewProxy {
 				true);
 		if (visualizerView != null)
 			visualizerView.addRenderer(lineRenderer);
-		else Log.d(LCAT,"Error: visualizerView is null");
+		else
+			Log.d(LCAT, "Error: visualizerView is null");
 	}
 
 	@Kroll.method
@@ -152,7 +153,11 @@ public class VisualizerViewProxy extends TiViewProxy {
 		paint.setAntiAlias(true);
 		paint.setColor(Color.argb(255, 222, 92, 143));
 		CircleRenderer circleRenderer = new CircleRenderer(paint, true);
-		visualizerView.addRenderer(circleRenderer);
+		if (visualizerView != null)
+			visualizerView.addRenderer(circleRenderer);
+		else
+			Log.d(LCAT, "Error: visualizerView is null");
+
 	}
 
 	@Kroll.method
@@ -164,24 +169,28 @@ public class VisualizerViewProxy extends TiViewProxy {
 		paint.setColor(Color.argb(255, 222, 92, 143));
 		CircleBarRenderer circleBarRenderer = new CircleBarRenderer(paint, 32,
 				true);
-		visualizerView.addRenderer(circleBarRenderer);
+		if (visualizerView != null)
+			visualizerView.addRenderer(circleBarRenderer);
+		else
+			Log.d(LCAT, "Error: visualizerView is null");
 	}
 
 	@Kroll.method
 	public void addBarGraphRenderers() {
-		Paint paint = new Paint();
+		/*Paint paint = new Paint();
 		paint.setStrokeWidth(50f);
 		paint.setAntiAlias(true);
 		paint.setColor(Color.argb(200, 56, 138, 252));
 		BarGraphRenderer barGraphRendererBottom = new BarGraphRenderer(16,
 				paint, false);
-		visualizerView.addRenderer(barGraphRendererBottom);
+		visualizerView.addRenderer(barGraphRendererBottom);*/
 		Paint paint2 = new Paint();
 		paint2.setStrokeWidth(12f);
 		paint2.setAntiAlias(true);
-		paint2.setColor(Color.argb(200, 181, 111, 233));
+		paint2.setColor(Color.argb(200, 56, 138, 252));
 		BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(4, paint2,
-				true);
+				false);
 		visualizerView.addRenderer(barGraphRendererTop);
+		
 	}
 }
