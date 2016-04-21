@@ -98,13 +98,29 @@ public class VisualizerViewProxy extends TiViewProxy {
 			super.processProperties(props);
 		}
 	}
+	
+	@Kroll.method 
+	public void release() {
+		if (visualizerView != null)
+			visualizerView.release();
+		else
+			Log.d(LCAT, "Error: visualizerView is null");
+	}
 
-	@Kroll.method
-	public void addLineRenderer() {
+	@Kroll.method 
+	public void clearRenderers() {
+		if (visualizerView != null)
+			visualizerView.clearRenderers();
+		else
+			Log.d(LCAT, "Error: visualizerView is null");
+	}
+	@Kroll.method 
+	public void addLineRenderer(KrollDict args) {
 		Paint linePaint = new Paint();
 		linePaint.setStrokeWidth(1f);
 		linePaint.setAntiAlias(true);
 		linePaint.setColor(Color.argb(88, 0, 128, 255));
+		
 		Paint lineFlashPaint = new Paint();
 		lineFlashPaint.setStrokeWidth(5f);
 		lineFlashPaint.setAntiAlias(true);

@@ -10,6 +10,7 @@ An view like imageView that takes the input from the Android MediaPlayer and dis
 Usage:
 ------
 
+For usage in Marshmellow devices, you need AUDIO_RECORDING permission on runtime. You must wrap the call of Visualizer into a permissionRequester. 
 
 ~~~
 ! function() {
@@ -17,12 +18,16 @@ Usage:
     var window = Ti.Ui.createWindow();
     var visualizerView = Visualizer.createVisualizerView({
         width : 500,
+        audioSessionId :0,
         height : 200
     });
     visualizerView.addEventListener('ready', function() {
-        visualizerView.addLineRenderer();
-        visualizerView.addCircleBarRenderer();
-        visualizerView.addCircleRenderer();
+        visualizerView.addLineRenderer({
+            basicStrokeWidth : 5,
+            basicColor : "#800000ff",
+            flashStrokeWidth : 5,
+            flashColor : "#800000ff"
+        });
         visualizerView.addBarGraphRenderers({
             color : "#800000ff",
             bars  : 12,
@@ -36,3 +41,5 @@ Usage:
     window.open();
 }();
 ~~~
+
+The optional audioSessionId 0 means you want visualize the mixer out. In other cases you need the ID. The standard mediaPlayer doesn't gives you this ID.  
