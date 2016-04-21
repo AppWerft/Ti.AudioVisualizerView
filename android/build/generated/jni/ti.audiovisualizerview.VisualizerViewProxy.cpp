@@ -86,6 +86,10 @@ Handle<FunctionTemplate> VisualizerViewProxy::getProxyTemplate()
 	titanium::ProxyFactory::registerProxyPair(javaClass, *proxyTemplate);
 
 	// Method bindings --------------------------------------------------------
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addLineRenderer", VisualizerViewProxy::addLineRenderer);
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addCircleBarRenderer", VisualizerViewProxy::addCircleBarRenderer);
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addCircleRenderer", VisualizerViewProxy::addCircleRenderer);
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addBarGraphRenderers", VisualizerViewProxy::addBarGraphRenderers);
 
 	Local<ObjectTemplate> prototypeTemplate = proxyTemplate->PrototypeTemplate();
 	Local<ObjectTemplate> instanceTemplate = proxyTemplate->InstanceTemplate();
@@ -104,6 +108,178 @@ Handle<FunctionTemplate> VisualizerViewProxy::getProxyTemplate()
 }
 
 // Methods --------------------------------------------------------------------
+Handle<Value> VisualizerViewProxy::addLineRenderer(const Arguments& args)
+{
+	LOGD(TAG, "addLineRenderer()");
+	HandleScope scope;
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		return titanium::JSException::GetJNIEnvironmentError();
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "addLineRenderer", "()V");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'addLineRenderer' with signature '()V'";
+			LOGE(TAG, error);
+				return titanium::JSException::Error(error);
+		}
+	}
+
+	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
+
+	jvalue* jArguments = 0;
+
+	jobject javaProxy = proxy->getJavaObject();
+	env->CallVoidMethodA(javaProxy, methodID, jArguments);
+
+	if (!JavaObject::useGlobalRefs) {
+		env->DeleteLocalRef(javaProxy);
+	}
+
+
+
+	if (env->ExceptionCheck()) {
+		titanium::JSException::fromJavaException();
+		env->ExceptionClear();
+	}
+
+
+
+
+	return v8::Undefined();
+
+}
+Handle<Value> VisualizerViewProxy::addCircleBarRenderer(const Arguments& args)
+{
+	LOGD(TAG, "addCircleBarRenderer()");
+	HandleScope scope;
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		return titanium::JSException::GetJNIEnvironmentError();
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "addCircleBarRenderer", "()V");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'addCircleBarRenderer' with signature '()V'";
+			LOGE(TAG, error);
+				return titanium::JSException::Error(error);
+		}
+	}
+
+	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
+
+	jvalue* jArguments = 0;
+
+	jobject javaProxy = proxy->getJavaObject();
+	env->CallVoidMethodA(javaProxy, methodID, jArguments);
+
+	if (!JavaObject::useGlobalRefs) {
+		env->DeleteLocalRef(javaProxy);
+	}
+
+
+
+	if (env->ExceptionCheck()) {
+		titanium::JSException::fromJavaException();
+		env->ExceptionClear();
+	}
+
+
+
+
+	return v8::Undefined();
+
+}
+Handle<Value> VisualizerViewProxy::addCircleRenderer(const Arguments& args)
+{
+	LOGD(TAG, "addCircleRenderer()");
+	HandleScope scope;
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		return titanium::JSException::GetJNIEnvironmentError();
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "addCircleRenderer", "()V");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'addCircleRenderer' with signature '()V'";
+			LOGE(TAG, error);
+				return titanium::JSException::Error(error);
+		}
+	}
+
+	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
+
+	jvalue* jArguments = 0;
+
+	jobject javaProxy = proxy->getJavaObject();
+	env->CallVoidMethodA(javaProxy, methodID, jArguments);
+
+	if (!JavaObject::useGlobalRefs) {
+		env->DeleteLocalRef(javaProxy);
+	}
+
+
+
+	if (env->ExceptionCheck()) {
+		titanium::JSException::fromJavaException();
+		env->ExceptionClear();
+	}
+
+
+
+
+	return v8::Undefined();
+
+}
+Handle<Value> VisualizerViewProxy::addBarGraphRenderers(const Arguments& args)
+{
+	LOGD(TAG, "addBarGraphRenderers()");
+	HandleScope scope;
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		return titanium::JSException::GetJNIEnvironmentError();
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "addBarGraphRenderers", "()V");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'addBarGraphRenderers' with signature '()V'";
+			LOGE(TAG, error);
+				return titanium::JSException::Error(error);
+		}
+	}
+
+	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
+
+	jvalue* jArguments = 0;
+
+	jobject javaProxy = proxy->getJavaObject();
+	env->CallVoidMethodA(javaProxy, methodID, jArguments);
+
+	if (!JavaObject::useGlobalRefs) {
+		env->DeleteLocalRef(javaProxy);
+	}
+
+
+
+	if (env->ExceptionCheck()) {
+		titanium::JSException::fromJavaException();
+		env->ExceptionClear();
+	}
+
+
+
+
+	return v8::Undefined();
+
+}
 
 // Dynamic property accessors -------------------------------------------------
 

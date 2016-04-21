@@ -43,10 +43,10 @@ public class VisualizerViewProxy extends TiViewProxy {
 
 	private static final String LCAT = "Pheelicks";
 	final public int DEFAULT_AUDIOSESSION = 0;
-	
+
 	public int audioSessionId = 0;
 	public int renderType = 0;
-	
+
 	// Constructor
 	public VisualizerViewProxy() {
 		super();
@@ -68,60 +68,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 	}
 
 	private class VisualizerImageView extends TiUIView {
-		// Methods for adding renderers to visualizer
-		private void addBarGraphRenderers() {
-			Paint paint = new Paint();
-			paint.setStrokeWidth(50f);
-			paint.setAntiAlias(true);
-			paint.setColor(Color.argb(200, 56, 138, 252));
-			BarGraphRenderer barGraphRendererBottom = new BarGraphRenderer(16,
-					paint, false);
-			visualizerView.addRenderer(barGraphRendererBottom);
-
-			Paint paint2 = new Paint();
-			paint2.setStrokeWidth(12f);
-			paint2.setAntiAlias(true);
-			paint2.setColor(Color.argb(200, 181, 111, 233));
-			BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(4,
-					paint2, true);
-			visualizerView.addRenderer(barGraphRendererTop);
-		}
-
-		private void addCircleBarRenderer() {
-			Paint paint = new Paint();
-			paint.setStrokeWidth(8f);
-			paint.setAntiAlias(true);
-			paint.setXfermode(new PorterDuffXfermode(Mode.LIGHTEN));
-			paint.setColor(Color.argb(255, 222, 92, 143));
-			CircleBarRenderer circleBarRenderer = new CircleBarRenderer(paint,
-					32, true);
-			visualizerView.addRenderer(circleBarRenderer);
-		}
-
-		private void addCircleRenderer() {
-			Paint paint = new Paint();
-			paint.setStrokeWidth(3f);
-			paint.setAntiAlias(true);
-			paint.setColor(Color.argb(255, 222, 92, 143));
-			CircleRenderer circleRenderer = new CircleRenderer(paint, true);
-			visualizerView.addRenderer(circleRenderer);
-		}
-
-		private void addLineRenderer() {
-			Paint linePaint = new Paint();
-			linePaint.setStrokeWidth(1f);
-			linePaint.setAntiAlias(true);
-			linePaint.setColor(Color.argb(88, 0, 128, 255));
-
-			Paint lineFlashPaint = new Paint();
-			lineFlashPaint.setStrokeWidth(5f);
-			lineFlashPaint.setAntiAlias(true);
-			lineFlashPaint.setColor(Color.argb(188, 255, 255, 255));
-			LineRenderer lineRenderer = new LineRenderer(linePaint,
-					lineFlashPaint, true);
-			visualizerView.addRenderer(lineRenderer);
-		}
-
+	
 		public VisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
 			// creating view from xml res
@@ -129,13 +76,13 @@ public class VisualizerViewProxy extends TiViewProxy {
 			Resources res = proxy.getActivity().getResources();
 			View visualizerContainer;
 			LayoutInflater inflater = LayoutInflater.from(getActivity());
-			visualizerContainer = inflater.inflate(res.getIdentifier("main",
-					"layout", packageName), null);
+			visualizerContainer = inflater.inflate(
+					res.getIdentifier("main", "layout", packageName), null);
 			visualizerView = (VisualizerView) visualizerContainer
 					.findViewById(res.getIdentifier("visualizerView", "id",
 							packageName));
 			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
-			addCircleRenderer(); 
+			addCircleRenderer();
 			addLineRenderer();
 		}
 
@@ -149,5 +96,59 @@ public class VisualizerViewProxy extends TiViewProxy {
 			}
 			super.processProperties(props);
 		}
+	}
+	@Kroll.method
+	public void addLineRenderer() {
+		Paint linePaint = new Paint();
+		linePaint.setStrokeWidth(1f);
+		linePaint.setAntiAlias(true);
+		linePaint.setColor(Color.argb(88, 0, 128, 255));
+
+		Paint lineFlashPaint = new Paint();
+		lineFlashPaint.setStrokeWidth(5f);
+		lineFlashPaint.setAntiAlias(true);
+		lineFlashPaint.setColor(Color.argb(188, 255, 255, 255));
+		LineRenderer lineRenderer = new LineRenderer(linePaint, lineFlashPaint,
+				true);
+		visualizerView.addRenderer(lineRenderer);
+
+	}
+	@Kroll.method
+	public void addCircleRenderer() {
+		Paint paint = new Paint();
+		paint.setStrokeWidth(3f);
+		paint.setAntiAlias(true);
+		paint.setColor(Color.argb(255, 222, 92, 143));
+		CircleRenderer circleRenderer = new CircleRenderer(paint, true);
+		visualizerView.addRenderer(circleRenderer);
+	}
+	@Kroll.method
+	public void addCircleBarRenderer() {
+		Paint paint = new Paint();
+		paint.setStrokeWidth(8f);
+		paint.setAntiAlias(true);
+		paint.setXfermode(new PorterDuffXfermode(Mode.LIGHTEN));
+		paint.setColor(Color.argb(255, 222, 92, 143));
+		CircleBarRenderer circleBarRenderer = new CircleBarRenderer(paint,
+				32, true);
+		visualizerView.addRenderer(circleBarRenderer);
+	}
+	@Kroll.method
+	public void addBarGraphRenderers() {
+		Paint paint = new Paint();
+		paint.setStrokeWidth(50f);
+		paint.setAntiAlias(true);
+		paint.setColor(Color.argb(200, 56, 138, 252));
+		BarGraphRenderer barGraphRendererBottom = new BarGraphRenderer(16,
+				paint, false);
+		visualizerView.addRenderer(barGraphRendererBottom);
+
+		Paint paint2 = new Paint();
+		paint2.setStrokeWidth(12f);
+		paint2.setAntiAlias(true);
+		paint2.setColor(Color.argb(200, 181, 111, 233));
+		BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(4,
+				paint2, true);
+		visualizerView.addRenderer(barGraphRendererTop);
 	}
 }
