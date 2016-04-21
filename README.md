@@ -16,9 +16,14 @@ Usage:
     var Visualizer = require('ti.audiovisualizerview');
     var window = Ti.Ui.createWindow();
     var visualizerView = Visualizer.createVisualizerView({
-        onready : function() {
-            visualizerView.addLineRenderer();
-        }
+        width : 500,
+        height : 200
+    });
+    visualizerView.addEventListener('ready', function() {
+        visualizerView.addLineRenderer();
+        visualizerView.addCircleBarRenderer();
+        visualizerView.addCircleRenderer();
+        visualizerView.addBarGraphRenderers();
     });
     window.add(visualizerView);
     Ti.Media.createAudioPlayer({

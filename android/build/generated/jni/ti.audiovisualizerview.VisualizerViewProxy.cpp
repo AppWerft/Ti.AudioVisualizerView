@@ -88,7 +88,6 @@ Handle<FunctionTemplate> VisualizerViewProxy::getProxyTemplate()
 	// Method bindings --------------------------------------------------------
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addLineRenderer", VisualizerViewProxy::addLineRenderer);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addCircleBarRenderer", VisualizerViewProxy::addCircleBarRenderer);
-	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "callThisCallbackDirectlyifViewisready", VisualizerViewProxy::callThisCallbackDirectlyifViewisready);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addCircleRenderer", VisualizerViewProxy::addCircleRenderer);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addBarGraphRenderers", VisualizerViewProxy::addBarGraphRenderers);
 
@@ -210,73 +209,6 @@ Handle<Value> VisualizerViewProxy::addCircleBarRenderer(const Arguments& args)
 		env->DeleteLocalRef(javaProxy);
 	}
 
-
-
-	if (env->ExceptionCheck()) {
-		titanium::JSException::fromJavaException();
-		env->ExceptionClear();
-	}
-
-
-
-
-	return v8::Undefined();
-
-}
-Handle<Value> VisualizerViewProxy::callThisCallbackDirectlyifViewisready(const Arguments& args)
-{
-	LOGD(TAG, "callThisCallbackDirectlyifViewisready()");
-	HandleScope scope;
-
-	JNIEnv *env = titanium::JNIScope::getEnv();
-	if (!env) {
-		return titanium::JSException::GetJNIEnvironmentError();
-	}
-	static jmethodID methodID = NULL;
-	if (!methodID) {
-		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "callThisCallbackDirectlyifViewisready", "(Ljava/util/HashMap;)V");
-		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'callThisCallbackDirectlyifViewisready' with signature '(Ljava/util/HashMap;)V'";
-			LOGE(TAG, error);
-				return titanium::JSException::Error(error);
-		}
-	}
-
-	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
-
-	if (args.Length() < 1) {
-		char errorStringBuffer[100];
-		sprintf(errorStringBuffer, "callThisCallbackDirectlyifViewisready: Invalid number of arguments. Expected 1 but got %d", args.Length());
-		return ThrowException(Exception::Error(String::New(errorStringBuffer)));
-	}
-
-	jvalue jArguments[1];
-
-
-
-
-	bool isNew_0;
-	
-	if (!args[0]->IsNull()) {
-		Local<Value> arg_0 = args[0];
-		jArguments[0].l =
-			titanium::TypeConverter::jsValueToJavaObject(env, arg_0, &isNew_0);
-	} else {
-		jArguments[0].l = NULL;
-	}
-
-	jobject javaProxy = proxy->getJavaObject();
-	env->CallVoidMethodA(javaProxy, methodID, jArguments);
-
-	if (!JavaObject::useGlobalRefs) {
-		env->DeleteLocalRef(javaProxy);
-	}
-
-
-
-			if (isNew_0) {
-				env->DeleteLocalRef(jArguments[0].l);
-			}
 
 
 	if (env->ExceptionCheck()) {

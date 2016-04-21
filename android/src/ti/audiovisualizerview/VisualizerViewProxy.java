@@ -62,36 +62,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 		return view;
 	}
 
-	@Kroll.method
-	public void callThisCallbackDirectlyifViewisready(HashMap args) {
-		// By specifying an explicit argument type in the method declaration
-		// (rather
-		// than a generic Object array), the argument type has already been
-		// validated
-
-		KrollFunction callback = null;
-		Object object = args.get("onready");
-		if (object instanceof KrollFunction) {
-			callback = (KrollFunction) object;
-		}
-
-		// Our callback will be passed 2 arguments: the value of the data
-		// property
-		// from the dictionary passed in and a fixed string
-
-		if (callback != null) {
-			// The 'callSync' method of the KrollCallback object can be used to
-			// directly
-			// call the associated JavaScript function and get a return value.
-			// In this
-			// instance there is no return value for the callback.
-			Object[] arrayOfValues = new Object[] {};
-			callback.call(getKrollObject(), arrayOfValues);
-
-			// Log.d(TAG,"[KROLLDEMO] callback was called");
-		}
-	}
-
 	// Handle creation options
 	@Override
 	public void handleCreationDict(KrollDict options) {
@@ -117,7 +87,9 @@ public class VisualizerViewProxy extends TiViewProxy {
 							packageName));
 			setNativeView(visualizerContainer);
 			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
-			callThisCallbackDirectlyifViewisready(new HashMap<String, String>());
+			if (proxy.hasListeners("onready")) {
+				proxy.fireEvent("onready", new KrollDict());
+			}
 			addBarGraphRenderers();
 			addLineRenderer();
 		}
@@ -177,13 +149,13 @@ public class VisualizerViewProxy extends TiViewProxy {
 
 	@Kroll.method
 	public void addBarGraphRenderers() {
-		/*Paint paint = new Paint();
-		paint.setStrokeWidth(50f);
-		paint.setAntiAlias(true);
-		paint.setColor(Color.argb(200, 56, 138, 252));
-		BarGraphRenderer barGraphRendererBottom = new BarGraphRenderer(16,
-				paint, false);
-		visualizerView.addRenderer(barGraphRendererBottom);*/
+		/*
+		 * Paint paint = new Paint(); paint.setStrokeWidth(50f);
+		 * paint.setAntiAlias(true); paint.setColor(Color.argb(200, 56, 138,
+		 * 252)); BarGraphRenderer barGraphRendererBottom = new
+		 * BarGraphRenderer(16, paint, false);
+		 * visualizerView.addRenderer(barGraphRendererBottom);
+		 */
 		Paint paint2 = new Paint();
 		paint2.setStrokeWidth(12f);
 		paint2.setAntiAlias(true);
@@ -191,6 +163,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 		BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(4, paint2,
 				false);
 		visualizerView.addRenderer(barGraphRendererTop);
-		
+
 	}
 }
