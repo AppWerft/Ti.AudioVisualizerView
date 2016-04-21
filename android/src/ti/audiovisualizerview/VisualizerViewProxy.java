@@ -14,13 +14,8 @@ import org.appcelerator.kroll.common.Log;
 
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.proxy.TiViewProxy;
-import org.appcelerator.titanium.view.TiCompositeLayout;
-import org.appcelerator.titanium.view.TiCompositeLayout.LayoutArrangement;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
-
-import com.pheelicks.utils.TunnelPlayerWorkaround;
-//import com.pheelicks.visualizer.R;
 
 import com.pheelicks.visualizer.renderer.BarGraphRenderer;
 import com.pheelicks.visualizer.renderer.CircleBarRenderer;
@@ -41,16 +36,17 @@ import android.graphics.PorterDuffXfermode;
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
 public class VisualizerViewProxy extends TiViewProxy {
 
+	// instance of pheelicks view
 	VisualizerView visualizerView;
-	// Standard Debugging variables
-	private static final String LCAT = "Pheelicks";
-
-	public int audioSessionId = 0;
-	public int renderType = 0;
-
 	TiApplication appContext;
 	Activity activity;
 
+	private static final String LCAT = "Pheelicks";
+	final public int DEFAULT_AUDIOSESSION = 0;
+	
+	public int audioSessionId = 0;
+	public int renderType = 0;
+	
 	// Constructor
 	public VisualizerViewProxy() {
 		super();
@@ -62,8 +58,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 	@Override
 	public TiUIView createView(Activity activity) {
 		TiUIView view = new VisualizerImageView(this);
-		view.getLayoutParams().autoFillsHeight = true;
-		view.getLayoutParams().autoFillsWidth = true;
 		return view;
 	}
 
@@ -71,8 +65,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 	@Override
 	public void handleCreationDict(KrollDict options) {
 		super.handleCreationDict(options);
-		// https://github.com/m1ga/com.miga.gifview/blob/master/android/src/com/miga/tigifview/GifViewProxy.java#L106-L116
-
 	}
 
 	private class VisualizerImageView extends TiUIView {
@@ -132,26 +124,19 @@ public class VisualizerViewProxy extends TiViewProxy {
 
 		public VisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
+			// creating view from xml res
 			String packageName = proxy.getActivity().getPackageName();
-			Log.d(LCAT, "packageName=" + packageName);
-			Resources resources = proxy.getActivity().getResources();
-			View visualizerWrapper;
-			int resId_visualizerContainer = -1;
-			int resId_visualizer = -1;
-			resId_visualizerContainer = resources.getIdentifier("main",
-					"layout", packageName);
-			Log.d(LCAT, "resId_visualizerContainer=" + resId_visualizerContainer);
-			resId_visualizer = resources.getIdentifier("visualizerView", "id",
-					packageName);
-			Log.d(LCAT, "resId_visualizer=" +resId_visualizer );
+			Resources res = proxy.getActivity().getResources();
+			View visualizerContainer;
 			LayoutInflater inflater = LayoutInflater.from(getActivity());
-			visualizerWrapper = inflater.inflate(resId_visualizerContainer, null);
-			visualizerView = (VisualizerView) visualizerWrapper
-					.findViewById(resId_visualizer);
-			visualizerView.link(0); // binding to mixerouts
+			visualizerContainer = inflater.inflate(res.getIdentifier("main",
+					"layout", packageName), null);
+			visualizerView = (VisualizerView) visualizerContainer
+					.findViewById(res.getIdentifier("visualizerView", "id",
+							packageName));
+			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
 			addCircleRenderer(); 
 			addLineRenderer();
-			Log.d(LCAT, "addLineRenderer");
 		}
 
 		@Override
