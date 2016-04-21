@@ -27,5 +27,3 @@ Usage:
     window.open();
 }();
 ~~~
-
-Possible types are TYPE_BAR, TYPE_CIRCLE, TYPE_CIRCLEBAR, TYPE_LINE.
