@@ -57,11 +57,13 @@ public class VisualizerViewProxy extends TiViewProxy {
 
 	@Override
 	public TiUIView createView(Activity activity) {
-		TiUIView view = new VisualizerImageView(this);
+		TiUIView view = new TiVisualizerImageView(this);
+		view.getLayoutParams().autoFillsHeight = true;
+		view.getLayoutParams().autoFillsWidth = true;
 		return view;
 	}
 	@Kroll.method
-	public void callThisCallbackDirectly(HashMap args) {
+	public void callThisCallbackDirectlyifViewisready(HashMap args) {
 		// By specifying an explicit argument type in the method declaration (rather
 		// than a generic Object array), the argument type has already been validated
 		
@@ -71,7 +73,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 			callback = (KrollFunction)object;
 		}
 		
-		Object data = args.get("data");
+		
 
 		// Our callback will be passed 2 arguments: the value of the data property
 		// from the dictionary passed in and a fixed string
@@ -81,7 +83,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 			// The 'callSync' method of the KrollCallback object can be used to directly 
 			// call the associated JavaScript function and get a return value. In this
 			// instance there is no return value for the callback.
-			Object[] arrayOfValues = new Object[]{ data, "dummy" };
+			Object[] arrayOfValues = new Object[]{  };
 			callback.call(getKrollObject(),arrayOfValues);
 
 			//Log.d(TAG,"[KROLLDEMO] callback was called");
@@ -97,22 +99,25 @@ public class VisualizerViewProxy extends TiViewProxy {
 		}
 	}
 
-	private class VisualizerImageView extends TiUIView {
-
-		public VisualizerImageView(final TiViewProxy proxy) {
+	private class TiVisualizerImageView extends TiUIView {
+		public TiVisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
 			// creating view from xml res
 			String packageName = proxy.getActivity().getPackageName();
 			Resources res = proxy.getActivity().getResources();
 			View visualizerContainer;
 			LayoutInflater inflater = LayoutInflater.from(getActivity());
+			
+			
 			visualizerContainer = inflater.inflate(
 					res.getIdentifier("main", "layout", packageName), null);
 			visualizerView = (VisualizerView) visualizerContainer
 					.findViewById(res.getIdentifier("visualizerView", "id",
 							packageName));
+			
+			setNativeView(visualizerContainer);
 			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
-			callThisCallbackDirectly(new HashMap<String, String>());
+			callThisCallbackDirectlyifViewisready(new HashMap<String, String>());
 			addLineRenderer();
 		}
 

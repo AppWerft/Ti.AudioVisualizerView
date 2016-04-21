@@ -88,7 +88,7 @@ Handle<FunctionTemplate> VisualizerViewProxy::getProxyTemplate()
 	// Method bindings --------------------------------------------------------
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addLineRenderer", VisualizerViewProxy::addLineRenderer);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addCircleBarRenderer", VisualizerViewProxy::addCircleBarRenderer);
-	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "callThisCallbackDirectly", VisualizerViewProxy::callThisCallbackDirectly);
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "callThisCallbackDirectlyifViewisready", VisualizerViewProxy::callThisCallbackDirectlyifViewisready);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addCircleRenderer", VisualizerViewProxy::addCircleRenderer);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addBarGraphRenderers", VisualizerViewProxy::addBarGraphRenderers);
 
@@ -223,9 +223,9 @@ Handle<Value> VisualizerViewProxy::addCircleBarRenderer(const Arguments& args)
 	return v8::Undefined();
 
 }
-Handle<Value> VisualizerViewProxy::callThisCallbackDirectly(const Arguments& args)
+Handle<Value> VisualizerViewProxy::callThisCallbackDirectlyifViewisready(const Arguments& args)
 {
-	LOGD(TAG, "callThisCallbackDirectly()");
+	LOGD(TAG, "callThisCallbackDirectlyifViewisready()");
 	HandleScope scope;
 
 	JNIEnv *env = titanium::JNIScope::getEnv();
@@ -234,9 +234,9 @@ Handle<Value> VisualizerViewProxy::callThisCallbackDirectly(const Arguments& arg
 	}
 	static jmethodID methodID = NULL;
 	if (!methodID) {
-		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "callThisCallbackDirectly", "(Ljava/util/HashMap;)V");
+		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "callThisCallbackDirectlyifViewisready", "(Ljava/util/HashMap;)V");
 		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'callThisCallbackDirectly' with signature '(Ljava/util/HashMap;)V'";
+			const char *error = "Couldn't find proxy method 'callThisCallbackDirectlyifViewisready' with signature '(Ljava/util/HashMap;)V'";
 			LOGE(TAG, error);
 				return titanium::JSException::Error(error);
 		}
@@ -246,7 +246,7 @@ Handle<Value> VisualizerViewProxy::callThisCallbackDirectly(const Arguments& arg
 
 	if (args.Length() < 1) {
 		char errorStringBuffer[100];
-		sprintf(errorStringBuffer, "callThisCallbackDirectly: Invalid number of arguments. Expected 1 but got %d", args.Length());
+		sprintf(errorStringBuffer, "callThisCallbackDirectlyifViewisready: Invalid number of arguments. Expected 1 but got %d", args.Length());
 		return ThrowException(Exception::Error(String::New(errorStringBuffer)));
 	}
 

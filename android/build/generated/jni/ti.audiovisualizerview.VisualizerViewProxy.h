@@ -32,7 +32,7 @@ private:
 	// Methods -----------------------------------------------------------
 	static v8::Handle<v8::Value> addLineRenderer(const v8::Arguments&);
 	static v8::Handle<v8::Value> addCircleBarRenderer(const v8::Arguments&);
-	static v8::Handle<v8::Value> callThisCallbackDirectly(const v8::Arguments&);
+	static v8::Handle<v8::Value> callThisCallbackDirectlyifViewisready(const v8::Arguments&);
 	static v8::Handle<v8::Value> addCircleRenderer(const v8::Arguments&);
 	static v8::Handle<v8::Value> addBarGraphRenderers(const v8::Arguments&);
 
