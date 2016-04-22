@@ -10,28 +10,34 @@ package ti.audiovisualizerview;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
-
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.kroll.common.Log;
+import android.app.Activity;
+import com.pheelicks.utils.TunnelPlayerWorkaround;
+import android.content.Context;
 
 @Kroll.module(name = "Audiovisualizerview", id = "ti.audiovisualizerview")
 public class AudiovisualizerviewModule extends KrollModule {
 	@Kroll.constant
 	public static final int AUDIOSESSION_OUTPUTMIX = 0;
-	@Kroll.constant
-	public static final int TYPE_BAR = 0;
-	@Kroll.constant
-	public static final int TYPE_CIRCLE = 1;
-	@Kroll.constant
-	public static final int TYPE_CIRCLEBAR = 2;
-	@Kroll.constant
-	public static final int TYPE_LINE = 3;
+
 	private static final String LCAT = "Pheelicks";
+
+	@Override
+	public void onResume(Activity activity) {
+		Log.d(LCAT, "[MODULE LIFECYCLE EVENT] resume");
+		Context context = TiApplication.getInstance().getApplicationContext();
+		TunnelPlayerWorkaround.createSilentMediaPlayer(context);
+		super.onResume(activity);
+	}
+
 	public AudiovisualizerviewModule() {
 		super();
 	}
+
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app) {
 		Log.d(LCAT, "inside onAppCreate");
 	}
+
 }

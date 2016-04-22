@@ -12,11 +12,11 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.kroll.KrollFunction;
-
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
 
+import com.pheelicks.utils.TunnelPlayerWorkaround;
 import com.pheelicks.visualizer.renderer.BarGraphRenderer;
 import com.pheelicks.visualizer.renderer.CircleBarRenderer;
 import com.pheelicks.visualizer.renderer.CircleRenderer;
@@ -26,7 +26,9 @@ import com.pheelicks.visualizer.VisualizerView;
 import android.app.Activity;
 import android.view.View;
 import android.view.LayoutInflater;
+import android.content.Context;
 import android.content.res.*;
+
 import java.util.HashMap;
 
 import android.graphics.Color;
@@ -34,10 +36,8 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 
-@Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class, propertyAccessors = {
-		"top", "width", "height", "onload" })
+@Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
 public class VisualizerViewProxy extends TiViewProxy {
-
 	// instance of pheelicks view
 	VisualizerView visualizerView;
 	TiApplication appContext;
@@ -66,14 +66,14 @@ public class VisualizerViewProxy extends TiViewProxy {
 	@Override
 	public void handleCreationDict(KrollDict options) {
 		super.handleCreationDict(options);
-		if (options.containsKey("onload")) {
-
-		}
 	}
 
 	private class TiVisualizerImageView extends TiUIView {
 		public TiVisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
+			Log.d(LCAT, "starting createSilentMediaPlayer ");
+			TunnelPlayerWorkaround.createSilentMediaPlayer(TiApplication
+					.getInstance().getApplicationContext());
 			// creating view from xml res
 			String packageName = proxy.getActivity().getPackageName();
 			Resources res = proxy.getActivity().getResources();
@@ -88,9 +88,10 @@ public class VisualizerViewProxy extends TiViewProxy {
 			setNativeView(visualizerContainer);
 			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
 			if (proxy.hasListeners("ready")) {
+				Log.d(LCAT, "fireEvent 'ready' ");
 				proxy.fireEvent("ready", new KrollDict());
 			}
-			
+
 		}
 
 		@Override
@@ -98,8 +99,8 @@ public class VisualizerViewProxy extends TiViewProxy {
 			super.processProperties(props);
 		}
 	}
-	
-	@Kroll.method 
+
+	@Kroll.method
 	public void release() {
 		if (visualizerView != null)
 			visualizerView.release();
@@ -107,20 +108,24 @@ public class VisualizerViewProxy extends TiViewProxy {
 			Log.d(LCAT, "Error: visualizerView is null");
 	}
 
-	@Kroll.method 
+	@Kroll.method
 	public void clearRenderers() {
 		if (visualizerView != null)
 			visualizerView.clearRenderers();
 		else
 			Log.d(LCAT, "Error: visualizerView is null");
 	}
-	@Kroll.method 
-	public void addLineRenderer(KrollDict args) {
+
+	@Kroll.method
+	public void addLineRenderer(Object args) {
+		HashMap<String, String> d = (HashMap<String, String>) args;
+		if (!d.containsKey("basicColor")) {
+		}
 		Paint linePaint = new Paint();
 		linePaint.setStrokeWidth(1f);
 		linePaint.setAntiAlias(true);
 		linePaint.setColor(Color.argb(88, 0, 128, 255));
-		
+
 		Paint lineFlashPaint = new Paint();
 		lineFlashPaint.setStrokeWidth(5f);
 		lineFlashPaint.setAntiAlias(true);
@@ -164,6 +169,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 
 	@Kroll.method
 	public void addBarGraphRenderers() {
+		Log.d(LCAT, "starting addBarGraphRenderers ");
 		/*
 		 * Paint paint = new Paint(); paint.setStrokeWidth(50f);
 		 * paint.setAntiAlias(true); paint.setColor(Color.argb(200, 56, 138,

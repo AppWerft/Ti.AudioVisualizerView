@@ -18,10 +18,7 @@ import android.util.Log;
 import org.appcelerator.titanium.util.TiRHelper;
 import org.appcelerator.titanium.util.TiRHelper.ResourceNotFoundException;
 
-//import com.pheelicks.visualizer.R;
-
 public class TunnelPlayerWorkaround {
-
 	public static int getRaw(String str) {
 		try {
 			return TiRHelper.getApplicationResource("raw." + str);
@@ -31,8 +28,7 @@ public class TunnelPlayerWorkaround {
 		}
 	}
 
-	private static final String TAG = "TunnelPlayerWorkaround";
-
+	private static final String LTAG = "Pheelicks";
 	private static final String SYSTEM_PROP_TUNNEL_DECODE_ENABLED = "tunnel.decode";
 
 	private TunnelPlayerWorkaround() {
@@ -63,13 +59,14 @@ public class TunnelPlayerWorkaround {
 		try {
 			// mp = MediaPlayer.create(context, R.raw.workaround_1min);
 			mp = MediaPlayer.create(context, getRaw("workaround_1min"));
+			Log.d(LTAG, "AudioSessionId=" + mp.getAudioSessionId());
 			mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			// NOTE: start() is no needed
 			mp.start();
 
 			result = true;
 		} catch (RuntimeException e) {
-			Log.e(TAG, "createSilentMediaPlayer()", e);
+			Log.e(LTAG, "createSilentMediaPlayer()", e);
 		} finally {
 			if (!result && mp != null) {
 				try {

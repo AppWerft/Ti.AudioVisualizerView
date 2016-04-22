@@ -87,6 +87,8 @@ Handle<FunctionTemplate> VisualizerViewProxy::getProxyTemplate()
 
 	// Method bindings --------------------------------------------------------
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addLineRenderer", VisualizerViewProxy::addLineRenderer);
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "clearRenderers", VisualizerViewProxy::clearRenderers);
+	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "release", VisualizerViewProxy::release);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addCircleBarRenderer", VisualizerViewProxy::addCircleBarRenderer);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addCircleRenderer", VisualizerViewProxy::addCircleRenderer);
 	DEFINE_PROTOTYPE_METHOD(proxyTemplate, "addBarGraphRenderers", VisualizerViewProxy::addBarGraphRenderers);
@@ -103,34 +105,6 @@ Handle<FunctionTemplate> VisualizerViewProxy::getProxyTemplate()
 	// Dynamic properties -----------------------------------------------------
 
 	// Accessors --------------------------------------------------------------
-	instanceTemplate->SetAccessor(
-		String::NewSymbol("top"),
-		titanium::Proxy::getProperty,
-		titanium::Proxy::onPropertyChanged,
-		Handle<Value>(), DEFAULT);
-	DEFINE_PROTOTYPE_METHOD_DATA(proxyTemplate, "getTop", titanium::Proxy::getProperty, String::NewSymbol("top"));
-	DEFINE_PROTOTYPE_METHOD_DATA(proxyTemplate, "setTop", titanium::Proxy::onPropertyChanged, String::NewSymbol("top"));
-	instanceTemplate->SetAccessor(
-		String::NewSymbol("width"),
-		titanium::Proxy::getProperty,
-		titanium::Proxy::onPropertyChanged,
-		Handle<Value>(), DEFAULT);
-	DEFINE_PROTOTYPE_METHOD_DATA(proxyTemplate, "getWidth", titanium::Proxy::getProperty, String::NewSymbol("width"));
-	DEFINE_PROTOTYPE_METHOD_DATA(proxyTemplate, "setWidth", titanium::Proxy::onPropertyChanged, String::NewSymbol("width"));
-	instanceTemplate->SetAccessor(
-		String::NewSymbol("height"),
-		titanium::Proxy::getProperty,
-		titanium::Proxy::onPropertyChanged,
-		Handle<Value>(), DEFAULT);
-	DEFINE_PROTOTYPE_METHOD_DATA(proxyTemplate, "getHeight", titanium::Proxy::getProperty, String::NewSymbol("height"));
-	DEFINE_PROTOTYPE_METHOD_DATA(proxyTemplate, "setHeight", titanium::Proxy::onPropertyChanged, String::NewSymbol("height"));
-	instanceTemplate->SetAccessor(
-		String::NewSymbol("onload"),
-		titanium::Proxy::getProperty,
-		titanium::Proxy::onPropertyChanged,
-		Handle<Value>(), DEFAULT);
-	DEFINE_PROTOTYPE_METHOD_DATA(proxyTemplate, "getOnload", titanium::Proxy::getProperty, String::NewSymbol("onload"));
-	DEFINE_PROTOTYPE_METHOD_DATA(proxyTemplate, "setOnload", titanium::Proxy::onPropertyChanged, String::NewSymbol("onload"));
 
 	return proxyTemplate;
 }
@@ -147,9 +121,119 @@ Handle<Value> VisualizerViewProxy::addLineRenderer(const Arguments& args)
 	}
 	static jmethodID methodID = NULL;
 	if (!methodID) {
-		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "addLineRenderer", "()V");
+		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "addLineRenderer", "(Ljava/lang/Object;)V");
 		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'addLineRenderer' with signature '()V'";
+			const char *error = "Couldn't find proxy method 'addLineRenderer' with signature '(Ljava/lang/Object;)V'";
+			LOGE(TAG, error);
+				return titanium::JSException::Error(error);
+		}
+	}
+
+	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
+
+	if (args.Length() < 1) {
+		char errorStringBuffer[100];
+		sprintf(errorStringBuffer, "addLineRenderer: Invalid number of arguments. Expected 1 but got %d", args.Length());
+		return ThrowException(Exception::Error(String::New(errorStringBuffer)));
+	}
+
+	jvalue jArguments[1];
+
+
+
+
+	bool isNew_0;
+	
+	if (!args[0]->IsNull()) {
+		Local<Value> arg_0 = args[0];
+		jArguments[0].l =
+			titanium::TypeConverter::jsValueToJavaObject(env, arg_0, &isNew_0);
+	} else {
+		jArguments[0].l = NULL;
+	}
+
+	jobject javaProxy = proxy->getJavaObject();
+	env->CallVoidMethodA(javaProxy, methodID, jArguments);
+
+	if (!JavaObject::useGlobalRefs) {
+		env->DeleteLocalRef(javaProxy);
+	}
+
+
+
+			if (isNew_0) {
+				env->DeleteLocalRef(jArguments[0].l);
+			}
+
+
+	if (env->ExceptionCheck()) {
+		titanium::JSException::fromJavaException();
+		env->ExceptionClear();
+	}
+
+
+
+
+	return v8::Undefined();
+
+}
+Handle<Value> VisualizerViewProxy::clearRenderers(const Arguments& args)
+{
+	LOGD(TAG, "clearRenderers()");
+	HandleScope scope;
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		return titanium::JSException::GetJNIEnvironmentError();
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "clearRenderers", "()V");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'clearRenderers' with signature '()V'";
+			LOGE(TAG, error);
+				return titanium::JSException::Error(error);
+		}
+	}
+
+	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
+
+	jvalue* jArguments = 0;
+
+	jobject javaProxy = proxy->getJavaObject();
+	env->CallVoidMethodA(javaProxy, methodID, jArguments);
+
+	if (!JavaObject::useGlobalRefs) {
+		env->DeleteLocalRef(javaProxy);
+	}
+
+
+
+	if (env->ExceptionCheck()) {
+		titanium::JSException::fromJavaException();
+		env->ExceptionClear();
+	}
+
+
+
+
+	return v8::Undefined();
+
+}
+Handle<Value> VisualizerViewProxy::release(const Arguments& args)
+{
+	LOGD(TAG, "release()");
+	HandleScope scope;
+
+	JNIEnv *env = titanium::JNIScope::getEnv();
+	if (!env) {
+		return titanium::JSException::GetJNIEnvironmentError();
+	}
+	static jmethodID methodID = NULL;
+	if (!methodID) {
+		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "release", "()V");
+		if (!methodID) {
+			const char *error = "Couldn't find proxy method 'release' with signature '()V'";
 			LOGE(TAG, error);
 				return titanium::JSException::Error(error);
 		}
