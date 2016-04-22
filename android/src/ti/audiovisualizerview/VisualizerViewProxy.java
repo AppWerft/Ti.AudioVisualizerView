@@ -15,6 +15,7 @@ import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.titanium.util.TiConvert;
 
 import com.pheelicks.utils.TunnelPlayerWorkaround;
 import com.pheelicks.visualizer.renderer.BarGraphRenderer;
@@ -40,11 +41,12 @@ import android.graphics.PorterDuffXfermode;
 public class VisualizerViewProxy extends TiViewProxy {
 	// instance of pheelicks view
 	VisualizerView visualizerView;
+	final public int DEFAULT_AUDIOSESSIONID = 0;
+	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
 	TiApplication appContext;
 	Activity activity;
 
 	private static final String LCAT = "Pheelicks";
-	final public int DEFAULT_AUDIOSESSION = 0;
 
 	// Constructor
 	public VisualizerViewProxy() {
@@ -71,9 +73,20 @@ public class VisualizerViewProxy extends TiViewProxy {
 	private class TiVisualizerImageView extends TiUIView {
 		public TiVisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
+			/*
+			 * you can bind the visualizer to id=0, this is the mixer out and
+			 * depends on volume , the ids >0 are result of getAudioSessionId()
+			 */
+			if (proxy.hasProperty("audioSessionId")) {
+				audioSessionId = TiConvert.toInt(proxy
+						.getProperty("audioSessionId"));
+				Log.d(LCAT, "audioSessionId " + audioSessionId);
+			}
 			Log.d(LCAT, "starting createSilentMediaPlayer ");
-			/*TunnelPlayerWorkaround.createSilentMediaPlayer(TiApplication
-					.getInstance().getApplicationContext());*/
+			Context context = TiApplication.getInstance()
+					.getApplicationContext();
+			TunnelPlayerWorkaround.createSilentMediaPlayer(context);
+
 			// creating view from xml res
 			String packageName = proxy.getActivity().getPackageName();
 			Resources res = proxy.getActivity().getResources();
@@ -86,12 +99,12 @@ public class VisualizerViewProxy extends TiViewProxy {
 					.findViewById(res.getIdentifier("visualizerView", "id",
 							packageName));
 			setNativeView(visualizerContainer);
-			visualizerView.link(DEFAULT_AUDIOSESSION); // binding to mixer out
+			visualizerView.link(audioSessionId); // binding to mixer
+													// out
 			if (proxy.hasListeners("ready")) {
 				Log.d(LCAT, "fireEvent 'ready' ");
 				proxy.fireEvent("ready", new KrollDict());
 			}
-
 		}
 
 		@Override

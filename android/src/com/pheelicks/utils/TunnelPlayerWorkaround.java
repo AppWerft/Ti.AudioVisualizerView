@@ -62,7 +62,7 @@ public class TunnelPlayerWorkaround {
 			Log.d(LTAG, "AudioSessionId=" + mp.getAudioSessionId());
 			mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			// NOTE: start() is no needed
-			mp.start();
+			//mp.start();
 
 			result = true;
 		} catch (RuntimeException e) {
