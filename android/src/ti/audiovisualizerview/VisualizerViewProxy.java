@@ -72,8 +72,8 @@ public class VisualizerViewProxy extends TiViewProxy {
 		public TiVisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
 			Log.d(LCAT, "starting createSilentMediaPlayer ");
-			TunnelPlayerWorkaround.createSilentMediaPlayer(TiApplication
-					.getInstance().getApplicationContext());
+			/*TunnelPlayerWorkaround.createSilentMediaPlayer(TiApplication
+					.getInstance().getApplicationContext());*/
 			// creating view from xml res
 			String packageName = proxy.getActivity().getPackageName();
 			Resources res = proxy.getActivity().getResources();

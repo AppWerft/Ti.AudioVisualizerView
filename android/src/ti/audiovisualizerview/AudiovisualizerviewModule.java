@@ -12,24 +12,13 @@ import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.kroll.common.Log;
-import android.app.Activity;
-import com.pheelicks.utils.TunnelPlayerWorkaround;
-import android.content.Context;
+
 
 @Kroll.module(name = "Audiovisualizerview", id = "ti.audiovisualizerview")
 public class AudiovisualizerviewModule extends KrollModule {
 	@Kroll.constant
 	public static final int AUDIOSESSION_OUTPUTMIX = 0;
-
-	private static final String LCAT = "Pheelicks";
-
-	@Override
-	public void onResume(Activity activity) {
-		Log.d(LCAT, "[MODULE LIFECYCLE EVENT] resume");
-		Context context = TiApplication.getInstance().getApplicationContext();
-		TunnelPlayerWorkaround.createSilentMediaPlayer(context);
-		super.onResume(activity);
-	}
+	public static final String LCAT = "Pheelicks";
 
 	public AudiovisualizerviewModule() {
 		super();
