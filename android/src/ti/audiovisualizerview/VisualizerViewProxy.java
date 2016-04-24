@@ -45,7 +45,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
 	TiApplication appContext;
 	Activity activity;
-	
 	/* this 4 events never will called, I need the events for rerendering and rebinding */
 	@Override
 	public void onStart(Activity activity) {
