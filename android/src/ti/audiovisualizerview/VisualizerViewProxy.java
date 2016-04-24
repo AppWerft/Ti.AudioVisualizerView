@@ -46,6 +46,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 	TiApplication appContext;
 	Activity activity;
 	/* this 4 events never will called, I need the events for rerendering and rebinding */
+	/* like here https://github.com/felixpalmer/android-visualizer/blob/master/src/com/pheelicks/app/MainActivity.java#L44-L49 */
 	@Override
 	public void onStart(Activity activity) {
 		
