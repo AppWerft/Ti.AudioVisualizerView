@@ -46,22 +46,28 @@ public class VisualizerViewProxy extends TiViewProxy {
 	TiApplication appContext;
 	Activity activity;
 
+
+	
 	@Override
 	public void onStart(Activity activity) {
-		Log.d(LCAT, "onStart called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+		
+		Log.d(LCAT,
+				"onStart called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 	}
 
 	@Override
 	public void onResume(Activity activity) {
-		Log.d(LCAT, "onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+		super.onResume(activity);
+		Log.d(LCAT,
+				"onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 	}
 
 	@Override
 	public void onPause(Activity activity) {
-		Log.d(LCAT, "onPause called ≠≠≠≠≠≠≠¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿≠≠≠≠≠≠≠≠≠≠≠");
+		super.onPause(activity);
+		Log.d(LCAT,
+				"onPause called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 	}
-
-
 
 	// Constructor
 	public VisualizerViewProxy() {
@@ -69,7 +75,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
 		Log.d(LCAT, "inside VisualizerViewProxy");
-		
+
 	}
 
 	@Override
@@ -77,6 +83,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 		TiUIView view = new TiVisualizerImageView(this);
 		view.getLayoutParams().autoFillsHeight = true;
 		view.getLayoutParams().autoFillsWidth = true;
+		/* this 3 event will never fired: */
 		return view;
 	}
 
@@ -89,8 +96,9 @@ public class VisualizerViewProxy extends TiViewProxy {
 	private class TiVisualizerImageView extends TiUIView {
 		
 		public TiVisualizerImageView(final TiViewProxy proxy) {
-			super(proxy);
 			
+			super(proxy);
+
 			/*
 			 * you can bind the visualizer to id=0, this is the mixer out and
 			 * depends on volume , the ids >0 are result of getAudioSessionId()
@@ -101,7 +109,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 				Log.d(LCAT, "audioSessionId " + audioSessionId);
 			}
 			Log.d(LCAT, "starting createSilentMediaPlayer ");
-
 			// creating view from xml res
 			String packageName = proxy.getActivity().getPackageName();
 			Resources res = proxy.getActivity().getResources();
@@ -114,19 +121,23 @@ public class VisualizerViewProxy extends TiViewProxy {
 					.findViewById(res.getIdentifier("visualizerView", "id",
 							packageName));
 			setNativeView(visualizerContainer);
-			
+
 			visualizerView.link(audioSessionId); // binding to mixer
 													// out
 			if (proxy.hasListeners("ready")) {
 				Log.d(LCAT, "fireEvent 'ready' ");
 				proxy.fireEvent("ready", new KrollDict());
 			}
+			
 		}
 
 		@Override
 		public void processProperties(KrollDict props) {
 			super.processProperties(props);
 		}
+
+	
+
 	}
 
 	@Kroll.method
