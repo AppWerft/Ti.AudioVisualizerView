@@ -10,13 +10,6 @@ package ti.audiovisualizerview;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.titanium.TiApplication;
-import org.appcelerator.kroll.common.Log;
-
-import com.pheelicks.utils.TunnelPlayerWorkaround;
-
-import android.app.Activity;
-import android.content.Context;
 
 @Kroll.module(name = "Audiovisualizerview", id = "ti.audiovisualizerview")
 public class AudiovisualizerviewModule extends KrollModule {
@@ -27,21 +20,4 @@ public class AudiovisualizerviewModule extends KrollModule {
 	public AudiovisualizerviewModule() {
 		super();
 	}
-
-	@Kroll.onAppCreate
-	public static void onAppCreate(TiApplication app) {
-		Context context = TiApplication.getInstance().getApplicationContext();
-		if (TunnelPlayerWorkaround.isTunnelDecodeEnabled(context)) {
-			TunnelPlayerWorkaround.createSilentMediaPlayer(context);
-		}
-	}
-
-	@Override
-	public void onStart(Activity activity) {
-		// This method is called when the module is loaded and the root context
-		// is started
-		Log.d(LCAT, "≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠[MODULE LIFECYCLE EVENT] start");
-		super.onStart(activity);
-	}
-
 }

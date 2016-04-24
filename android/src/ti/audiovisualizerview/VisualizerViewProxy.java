@@ -25,59 +25,41 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
+//import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
+import org.appcelerator.titanium.TiLifecycle.OnLifecycleEvent;
+import org.appcelerator.titanium.TiBaseActivity;
 
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
-public class VisualizerViewProxy extends TiViewProxy {
+public class VisualizerViewProxy extends TiViewProxy implements
+		OnLifecycleEvent {
 	// instance of pheelicks view
-	VisualizerView visualizerView;
+	private VisualizerView visualizerView;
 	private static final String LCAT = "Pheelicks";
 	final public int DEFAULT_AUDIOSESSIONID = 0;
 	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
 	TiApplication appContext;
 	Activity activity;
-
-	/*
-	 * this 4 events never will called, I need the events for rerendering and
-	 * rebinding
-	 */
-	/*
-	 * like here
-	 * https://github.com/felixpalmer/android-visualizer/blob/master/src
-	 * /com/pheelicks/app/MainActivity.java#L44-L49
-	 */
-	@Override
-	public void onStart(Activity activity) {
-		Log.d(LCAT, "onStart called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
-	}
-
-	@Override
-	public void onResume(Activity activity) {
-		super.onResume(activity);
-		Log.d(LCAT, "onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
-	}
-
-	@Override
-	public void onPause(Activity activity) {
-		super.onPause(activity);
-		Log.d(LCAT, "onPause called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
-	}
-
+	
+	TiUIView mView;
+	
 	// Constructor
 	public VisualizerViewProxy() {
 		super();
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
-		Log.d(LCAT, "inside VisualizerViewProxy");
-
+		if (activity instanceof TiBaseActivity) {
+			((TiBaseActivity) activity).addOnLifecycleEventListener(this);
+		}
 	}
 
 	@Override
 	public TiUIView createView(Activity activity) {
-		TiUIView view = new TiVisualizerImageView(this);
-		view.getLayoutParams().autoFillsHeight = true;
-		view.getLayoutParams().autoFillsWidth = true;
+		Log.d(LCAT, "createView inside Pro");
+		mView = new VisualizerImageView(this);
+		mView.getLayoutParams().autoFillsHeight = true;
+		mView.getLayoutParams().autoFillsWidth = true;
 		/* this 3 event will never fired: */
-		return view;
+		return mView;
 	}
 
 	// Handle creation options
@@ -86,12 +68,20 @@ public class VisualizerViewProxy extends TiViewProxy {
 		super.handleCreationDict(options);
 	}
 
-	private class TiVisualizerImageView extends TiUIView {
+	@Override
+	public void onResume(Activity activity) {
+		Log.d(LCAT, "onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+		mView.initView();
+	}
 
-		public TiVisualizerImageView(final TiViewProxy proxy) {
+	@Override
+	public void onPause(Activity activity) {
+		Log.d(LCAT, "onPause called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+	}
 
+	public class VisualizerImageView extends TiUIView {
+		public VisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
-
 			/*
 			 * you can bind the visualizer to id=0, this is the mixer out and
 			 * depends on volume , the ids >0 are result of getAudioSessionId()
@@ -114,14 +104,16 @@ public class VisualizerViewProxy extends TiViewProxy {
 					.findViewById(res.getIdentifier("visualizerView", "id",
 							packageName));
 			setNativeView(visualizerContainer);
+		}
 
+		public void initView() {
+			Log.d(LCAT, "initView");
 			visualizerView.link(audioSessionId); // binding to mixer
-													// out
+			// out
 			if (proxy.hasListeners("ready")) {
 				Log.d(LCAT, "fireEvent 'ready' ");
 				proxy.fireEvent("ready", new KrollDict());
 			}
-
 		}
 
 		@Override
