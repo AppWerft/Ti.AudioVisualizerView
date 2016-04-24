@@ -61,9 +61,10 @@ public class TunnelPlayerWorkaround {
 			mp = MediaPlayer.create(context, getRaw("workaround_1min"));
 			Log.d(LTAG, "AudioSessionId=" + mp.getAudioSessionId());
 			mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			mp.setVolume(1.0f, 1.0f);
+			mp.setLooping(false);
+			// mp.prepare();
 			// NOTE: start() is no needed
-			//mp.start();
-
 			result = true;
 		} catch (RuntimeException e) {
 			Log.e(LTAG, "createSilentMediaPlayer()", e);

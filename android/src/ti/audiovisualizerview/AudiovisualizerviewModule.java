@@ -13,6 +13,8 @@ import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.kroll.common.Log;
 
+import com.pheelicks.utils.TunnelPlayerWorkaround;
+import android.content.Context;
 
 @Kroll.module(name = "Audiovisualizerview", id = "ti.audiovisualizerview")
 public class AudiovisualizerviewModule extends KrollModule {
@@ -26,7 +28,12 @@ public class AudiovisualizerviewModule extends KrollModule {
 
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app) {
-		Log.d(LCAT, "inside onAppCreate");
+		Log.d(LCAT, "inside onAppCreate ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+		Context context = TiApplication.getInstance().getApplicationContext();
+		if (TunnelPlayerWorkaround.isTunnelDecodeEnabled(context)) {
+			TunnelPlayerWorkaround.createSilentMediaPlayer(context);
+		}
+		Log.d(LCAT, "end of onAppCreate ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 	}
 
 }

@@ -17,7 +17,7 @@ import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.util.TiConvert;
 
-import com.pheelicks.utils.TunnelPlayerWorkaround;
+
 import com.pheelicks.visualizer.renderer.BarGraphRenderer;
 import com.pheelicks.visualizer.renderer.CircleBarRenderer;
 import com.pheelicks.visualizer.renderer.CircleRenderer;
@@ -71,6 +71,9 @@ public class VisualizerViewProxy extends TiViewProxy {
 	}
 
 	private class TiVisualizerImageView extends TiUIView {
+		
+
+		
 		public TiVisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
 			/*
@@ -83,9 +86,8 @@ public class VisualizerViewProxy extends TiViewProxy {
 				Log.d(LCAT, "audioSessionId " + audioSessionId);
 			}
 			Log.d(LCAT, "starting createSilentMediaPlayer ");
-			Context context = TiApplication.getInstance()
-					.getApplicationContext();
-			TunnelPlayerWorkaround.createSilentMediaPlayer(context);
+			
+		
 
 			// creating view from xml res
 			String packageName = proxy.getActivity().getPackageName();
@@ -130,9 +132,9 @@ public class VisualizerViewProxy extends TiViewProxy {
 	}
 
 	@Kroll.method
-	public void addLineRenderer(Object args) {
-		HashMap<String, String> d = (HashMap<String, String>) args;
-		if (!d.containsKey("basicColor")) {
+	public void addLineRenderer(@Kroll.argument(optional=true) KrollDict args) {
+		if (args != null && args.containsKey("basicColor")) {
+			
 		}
 		Paint linePaint = new Paint();
 		linePaint.setStrokeWidth(1f);

@@ -43,3 +43,12 @@ For usage in Marshmellow devices, you need AUDIO_RECORDING permission on runtime
 ~~~
 
 The optional audioSessionId 0 means you want visualize the mixer out. In other cases you need the ID. The standard mediaPlayer doesn't gives you this ID. There is a JIRA ticket: https://jira.appcelerator.org/browse/AC-3538 
+
+YOu can use this code to retreive audioSessionId:
+~~~
+var mp = require('com.kcwdev.audio').createAudioPlayer({
+    url : "https://raw.githubusercontent.com/felixpalmer/android-visualizer/master/res/raw/test.mp3"
+});
+mp.start();
+console.log(mp.getAudioSessionId());
+~~~

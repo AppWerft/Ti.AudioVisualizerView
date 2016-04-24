@@ -121,9 +121,9 @@ Handle<Value> VisualizerViewProxy::addLineRenderer(const Arguments& args)
 	}
 	static jmethodID methodID = NULL;
 	if (!methodID) {
-		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "addLineRenderer", "(Ljava/lang/Object;)V");
+		methodID = env->GetMethodID(VisualizerViewProxy::javaClass, "addLineRenderer", "(Lorg/appcelerator/kroll/KrollDict;)V");
 		if (!methodID) {
-			const char *error = "Couldn't find proxy method 'addLineRenderer' with signature '(Ljava/lang/Object;)V'";
+			const char *error = "Couldn't find proxy method 'addLineRenderer' with signature '(Lorg/appcelerator/kroll/KrollDict;)V'";
 			LOGE(TAG, error);
 				return titanium::JSException::Error(error);
 		}
@@ -131,11 +131,6 @@ Handle<Value> VisualizerViewProxy::addLineRenderer(const Arguments& args)
 
 	titanium::Proxy* proxy = titanium::Proxy::unwrap(args.Holder());
 
-	if (args.Length() < 1) {
-		char errorStringBuffer[100];
-		sprintf(errorStringBuffer, "addLineRenderer: Invalid number of arguments. Expected 1 but got %d", args.Length());
-		return ThrowException(Exception::Error(String::New(errorStringBuffer)));
-	}
 
 	jvalue jArguments[1];
 
@@ -143,13 +138,18 @@ Handle<Value> VisualizerViewProxy::addLineRenderer(const Arguments& args)
 
 
 	bool isNew_0;
+	if (args.Length() <= 0) {
+		jArguments[0].l = NULL;
+
+	} else {
 	
 	if (!args[0]->IsNull()) {
 		Local<Value> arg_0 = args[0];
 		jArguments[0].l =
-			titanium::TypeConverter::jsValueToJavaObject(env, arg_0, &isNew_0);
+			titanium::TypeConverter::jsObjectToJavaKrollDict(env, arg_0, &isNew_0);
 	} else {
 		jArguments[0].l = NULL;
+	}
 	}
 
 	jobject javaProxy = proxy->getJavaObject();
