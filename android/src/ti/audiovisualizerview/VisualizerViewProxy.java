@@ -17,7 +17,6 @@ import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.util.TiConvert;
 
-
 import com.pheelicks.visualizer.renderer.BarGraphRenderer;
 import com.pheelicks.visualizer.renderer.CircleBarRenderer;
 import com.pheelicks.visualizer.renderer.CircleRenderer;
@@ -41,12 +40,28 @@ import android.graphics.PorterDuffXfermode;
 public class VisualizerViewProxy extends TiViewProxy {
 	// instance of pheelicks view
 	VisualizerView visualizerView;
+	private static final String LCAT = "Pheelicks";
 	final public int DEFAULT_AUDIOSESSIONID = 0;
 	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
 	TiApplication appContext;
 	Activity activity;
 
-	private static final String LCAT = "Pheelicks";
+	@Override
+	public void onStart(Activity activity) {
+		Log.d(LCAT, "onStart called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+	}
+
+	@Override
+	public void onResume(Activity activity) {
+		Log.d(LCAT, "onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+	}
+
+	@Override
+	public void onPause(Activity activity) {
+		Log.d(LCAT, "onPause called ≠≠≠≠≠≠≠¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿≠≠≠≠≠≠≠≠≠≠≠");
+	}
+
+
 
 	// Constructor
 	public VisualizerViewProxy() {
@@ -54,6 +69,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
 		Log.d(LCAT, "inside VisualizerViewProxy");
+		
 	}
 
 	@Override
@@ -72,10 +88,9 @@ public class VisualizerViewProxy extends TiViewProxy {
 
 	private class TiVisualizerImageView extends TiUIView {
 		
-
-		
 		public TiVisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
+			
 			/*
 			 * you can bind the visualizer to id=0, this is the mixer out and
 			 * depends on volume , the ids >0 are result of getAudioSessionId()
@@ -86,8 +101,6 @@ public class VisualizerViewProxy extends TiViewProxy {
 				Log.d(LCAT, "audioSessionId " + audioSessionId);
 			}
 			Log.d(LCAT, "starting createSilentMediaPlayer ");
-			
-		
 
 			// creating view from xml res
 			String packageName = proxy.getActivity().getPackageName();
@@ -101,6 +114,7 @@ public class VisualizerViewProxy extends TiViewProxy {
 					.findViewById(res.getIdentifier("visualizerView", "id",
 							packageName));
 			setNativeView(visualizerContainer);
+			
 			visualizerView.link(audioSessionId); // binding to mixer
 													// out
 			if (proxy.hasListeners("ready")) {
@@ -132,9 +146,9 @@ public class VisualizerViewProxy extends TiViewProxy {
 	}
 
 	@Kroll.method
-	public void addLineRenderer(@Kroll.argument(optional=true) KrollDict args) {
+	public void addLineRenderer(@Kroll.argument(optional = true) KrollDict args) {
 		if (args != null && args.containsKey("basicColor")) {
-			
+
 		}
 		Paint linePaint = new Paint();
 		linePaint.setStrokeWidth(1f);

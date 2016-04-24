@@ -28,12 +28,10 @@ public class AudiovisualizerviewModule extends KrollModule {
 
 	@Kroll.onAppCreate
 	public static void onAppCreate(TiApplication app) {
-		Log.d(LCAT, "inside onAppCreate ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 		Context context = TiApplication.getInstance().getApplicationContext();
 		if (TunnelPlayerWorkaround.isTunnelDecodeEnabled(context)) {
 			TunnelPlayerWorkaround.createSilentMediaPlayer(context);
 		}
-		Log.d(LCAT, "end of onAppCreate ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 	}
 
 }
