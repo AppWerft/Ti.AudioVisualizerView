@@ -11,26 +11,16 @@ package ti.audiovisualizerview;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
-import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.util.TiConvert;
-
-import com.pheelicks.visualizer.renderer.BarGraphRenderer;
-import com.pheelicks.visualizer.renderer.CircleBarRenderer;
-import com.pheelicks.visualizer.renderer.CircleRenderer;
-import com.pheelicks.visualizer.renderer.LineRenderer;
+import com.pheelicks.visualizer.renderer.*;
 import com.pheelicks.visualizer.VisualizerView;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.LayoutInflater;
-import android.content.Context;
 import android.content.res.*;
-
-import java.util.HashMap;
-
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
