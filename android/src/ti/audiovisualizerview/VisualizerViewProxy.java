@@ -45,27 +45,31 @@ public class VisualizerViewProxy extends TiViewProxy {
 	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
 	TiApplication appContext;
 	Activity activity;
-	/* this 4 events never will called, I need the events for rerendering and rebinding */
-	/* like here https://github.com/felixpalmer/android-visualizer/blob/master/src/com/pheelicks/app/MainActivity.java#L44-L49 */
+
+	/*
+	 * this 4 events never will called, I need the events for rerendering and
+	 * rebinding
+	 */
+	/*
+	 * like here
+	 * https://github.com/felixpalmer/android-visualizer/blob/master/src
+	 * /com/pheelicks/app/MainActivity.java#L44-L49
+	 */
 	@Override
 	public void onStart(Activity activity) {
-		
-		Log.d(LCAT,
-				"onStart called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+		Log.d(LCAT, "onStart called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 	}
 
 	@Override
 	public void onResume(Activity activity) {
 		super.onResume(activity);
-		Log.d(LCAT,
-				"onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+		Log.d(LCAT, "onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 	}
 
 	@Override
 	public void onPause(Activity activity) {
 		super.onPause(activity);
-		Log.d(LCAT,
-				"onPause called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+		Log.d(LCAT, "onPause called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 	}
 
 	// Constructor
@@ -93,9 +97,9 @@ public class VisualizerViewProxy extends TiViewProxy {
 	}
 
 	private class TiVisualizerImageView extends TiUIView {
-		
+
 		public TiVisualizerImageView(final TiViewProxy proxy) {
-			
+
 			super(proxy);
 
 			/*
@@ -127,15 +131,13 @@ public class VisualizerViewProxy extends TiViewProxy {
 				Log.d(LCAT, "fireEvent 'ready' ");
 				proxy.fireEvent("ready", new KrollDict());
 			}
-			
+
 		}
 
 		@Override
 		public void processProperties(KrollDict props) {
 			super.processProperties(props);
 		}
-
-	
 
 	}
 
