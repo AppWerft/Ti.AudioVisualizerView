@@ -80,14 +80,10 @@ public class VisualizerView extends View {
 	 *            - audioSessionId, 0 if mixer out
 	 */
 	public void link(int audioSessionId) {
-		Log.d(LTAG,"link audioSessionId " + audioSessionId);
 		// Create the Visualizer object and attach it to our media player.
 		mVisualizer = new Visualizer(audioSessionId);
-		
-		Log.d(LTAG,"successfull visualizer linked on audioSessionId" + audioSessionId);
-		
+		Log.d(LTAG,"successfull visualizer linked on audioSessionId " + audioSessionId);
 		mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
-
 		// Pass through Visualizer data to VisualizerView
 		Visualizer.OnDataCaptureListener captureListener = new Visualizer.OnDataCaptureListener() {
 			@Override

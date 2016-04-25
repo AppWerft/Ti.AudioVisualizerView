@@ -3,7 +3,7 @@
 android:layout_width="fill_parent"
 android:layout_height="fill_parent">
 	<com.pheelicks.visualizer.VisualizerView
-	android:id="@+id/visualizerView"
+	android:id="@+id/pheelicksView"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" ></com.pheelicks.visualizer.VisualizerView>
 </LinearLayout>

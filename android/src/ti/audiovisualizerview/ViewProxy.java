@@ -30,23 +30,19 @@ import org.appcelerator.titanium.TiLifecycle.OnLifecycleEvent;
 import org.appcelerator.titanium.TiBaseActivity;
 
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
-public class ViewProxy extends TiViewProxy implements
-		OnLifecycleEvent {
+public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	// instance of pheelicks view
-	private VisualizerView visualizerView;
+	private VisualizerView pheelicksView;
 	private static final String LCAT = "Pheelicks";
 	final public int DEFAULT_AUDIOSESSIONID = 0;
 	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
 	TiApplication appContext;
-	Activity activity;
-	
-	VisualizerImageView mView;
-	
+	VisualizerImageView mView; // instance of TiUIView
 	// Constructor
 	public ViewProxy() {
 		super();
 		appContext = TiApplication.getInstance();
-		activity = appContext.getCurrentActivity();
+		Activity activity = appContext.getCurrentActivity();
 		if (activity instanceof TiBaseActivity) {
 			((TiBaseActivity) activity).addOnLifecycleEventListener(this);
 		}
@@ -56,9 +52,9 @@ public class ViewProxy extends TiViewProxy implements
 	public TiUIView createView(Activity activity) {
 		Log.d(LCAT, "createView inside Pro");
 		this.mView = new VisualizerImageView(this);
-		mView.getLayoutParams().autoFillsHeight = true;
-		mView.getLayoutParams().autoFillsWidth = true;
-		return mView;
+		this.mView.getLayoutParams().autoFillsHeight = true;
+		this.mView.getLayoutParams().autoFillsWidth = true;
+		return this.mView;
 	}
 
 	// Handle creation options
@@ -67,9 +63,27 @@ public class ViewProxy extends TiViewProxy implements
 		super.handleCreationDict(options);
 	}
 
-	
+	@Override
+	public void onResume(Activity activity) {
+		Log.d(LCAT, "onResume called <<<<<<<<<<<<<<<<<<<<");
+		Log.d(LCAT, "try to init view");
+		
+		this.mView.init();
+	}
 
-	private class VisualizerImageView extends TiUIView {
+	@Override
+	public void onPause(Activity activity) {
+		this.mView.cleanUp();
+		Log.d(LCAT, "onPause called >>>>>>>>>>>>>>>>>>>>");
+	}
+
+	@Override
+	public void onDestroy(Activity activity) {
+		this.mView.cleanUp();
+		Log.d(LCAT, "onPause called >>>>>>>>>>>>>>>>>>>>");
+	}
+
+	public class VisualizerImageView extends TiUIView {
 		public VisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
 			/*
@@ -83,21 +97,22 @@ public class ViewProxy extends TiViewProxy implements
 			}
 			Log.d(LCAT, "starting createSilentMediaPlayer ");
 			// creating view from xml res
+
+		}
+
+		public void init() {
+			Log.d(LCAT, "initView started");
 			Activity activity = proxy.getActivity();
 			String packageName = activity.getPackageName();
 			Resources res = activity.getResources();
 			LayoutInflater inflater = LayoutInflater.from(activity);
 			View visualizerContainer = inflater.inflate(
 					res.getIdentifier("main", "layout", packageName), null);
-			visualizerView = (VisualizerView) visualizerContainer
-					.findViewById(res.getIdentifier("visualizerView", "id",
+			pheelicksView = (VisualizerView) visualizerContainer
+					.findViewById(res.getIdentifier("pheelicksView", "id",
 							packageName));
 			setNativeView(visualizerContainer);
-		}
-
-		public void initView() {
-			Log.d(LCAT, "initView");
-			visualizerView.link(audioSessionId); // binding to mixer
+			pheelicksView.link(audioSessionId); // binding to mixer
 			// out
 			if (proxy.hasListeners("ready")) {
 				Log.d(LCAT, "fireEvent 'ready' ");
@@ -105,39 +120,33 @@ public class ViewProxy extends TiViewProxy implements
 			}
 		}
 
+		public void cleanUp() {
+			pheelicksView.release();
+			Log.d(LCAT, "cleanView");
+
+		}
+
 		@Override
 		public void processProperties(KrollDict props) {
 			super.processProperties(props);
 		}
 	}
-	
-	@Override
-	public void onResume(Activity activity) {
-		Log.d(LCAT, "onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
-		mView.initView();
-        this.mView.initView();	
-	}
-	
-	@Override
-	public void onPause(Activity activity) {
-		Log.d(LCAT, "onPause called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
-	}
 
-	/*  INTERFACE */
+	/* INTERFACE */
 	@Kroll.method
 	public void release() {
-		if (visualizerView != null)
-			visualizerView.release();
+		if (pheelicksView != null)
+			pheelicksView.release();
 		else
-			Log.d(LCAT, "Error: visualizerView is null");
+			Log.d(LCAT, "Error: pheelicksView is null");
 	}
 
 	@Kroll.method
 	public void clearRenderers() {
-		if (visualizerView != null)
-			visualizerView.clearRenderers();
+		if (pheelicksView != null)
+			pheelicksView.clearRenderers();
 		else
-			Log.d(LCAT, "Error: visualizerView is null");
+			Log.d(LCAT, "Error: pheelicksView is null");
 	}
 
 	@Kroll.method
@@ -156,10 +165,10 @@ public class ViewProxy extends TiViewProxy implements
 		lineFlashPaint.setColor(Color.argb(188, 255, 255, 255));
 		LineRenderer lineRenderer = new LineRenderer(linePaint, lineFlashPaint,
 				true);
-		if (visualizerView != null)
-			visualizerView.addRenderer(lineRenderer);
+		if (pheelicksView != null)
+			pheelicksView.addRenderer(lineRenderer);
 		else
-			Log.d(LCAT, "Error: visualizerView is null");
+			Log.d(LCAT, "Error: pheelicksView is null");
 	}
 
 	@Kroll.method
@@ -169,10 +178,10 @@ public class ViewProxy extends TiViewProxy implements
 		paint.setAntiAlias(true);
 		paint.setColor(Color.argb(255, 222, 92, 143));
 		CircleRenderer circleRenderer = new CircleRenderer(paint, true);
-		if (visualizerView != null)
-			visualizerView.addRenderer(circleRenderer);
+		if (pheelicksView != null)
+			pheelicksView.addRenderer(circleRenderer);
 		else
-			Log.d(LCAT, "Error: visualizerView is null");
+			Log.d(LCAT, "Error: pheelicksView is null");
 
 	}
 
@@ -185,10 +194,10 @@ public class ViewProxy extends TiViewProxy implements
 		paint.setColor(Color.argb(255, 222, 92, 143));
 		CircleBarRenderer circleBarRenderer = new CircleBarRenderer(paint, 32,
 				true);
-		if (visualizerView != null)
-			visualizerView.addRenderer(circleBarRenderer);
+		if (pheelicksView != null)
+			pheelicksView.addRenderer(circleBarRenderer);
 		else
-			Log.d(LCAT, "Error: visualizerView is null");
+			Log.d(LCAT, "Error: pheelicksView is null");
 	}
 
 	@Kroll.method
@@ -199,7 +208,7 @@ public class ViewProxy extends TiViewProxy implements
 		 * paint.setAntiAlias(true); paint.setColor(Color.argb(200, 56, 138,
 		 * 252)); BarGraphRenderer barGraphRendererBottom = new
 		 * BarGraphRenderer(16, paint, false);
-		 * visualizerView.addRenderer(barGraphRendererBottom);
+		 * pheelicksView.addRenderer(barGraphRendererBottom);
 		 */
 		Paint paint2 = new Paint();
 		paint2.setStrokeWidth(12f);
@@ -207,7 +216,7 @@ public class ViewProxy extends TiViewProxy implements
 		paint2.setColor(Color.argb(200, 56, 138, 252));
 		BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(4, paint2,
 				false);
-		visualizerView.addRenderer(barGraphRendererTop);
-
+		pheelicksView.addRenderer(barGraphRendererTop);
+		Log.d(LCAT, "finishing addBarGraphRenderers ");
 	}
 }
