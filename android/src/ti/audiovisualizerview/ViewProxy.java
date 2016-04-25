@@ -15,14 +15,14 @@ import org.appcelerator.kroll.KrollModule;
 
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
-import android.app.Activity;
 import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
+
+import android.app.Activity;
 
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
 public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	private static final String LCAT = "Pheelicks";
-	public int audioSessionId = 0;
-	VisualizerImageView mView; // instance of TiUIView
+	private VisualizerImageView mView; // instance of TiUIView
 
 	public ViewProxy() {
 		super();
@@ -39,7 +39,6 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	public void onResume(Activity activity) {
 		super.onResume(activity);
 		Log.d(LCAT, "onResume called <<<<<<<<<<<<<<<<<<<<");
-		Log.d(LCAT, "try to init view");
 		this.mView.init();
 	}
 
@@ -63,8 +62,6 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 
 	@Kroll.method
 	public void addLineRenderer(@Kroll.argument(optional = true) KrollDict args) {
-		if (args != null && args.containsKey("basicColor")) {
-		}
 		mView.addLineRenderer();
 	}
 
@@ -76,7 +73,6 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	@Kroll.method
 	public void addBarGraphRenderers() {
 		mView.addBarGraphRenderers();
-
 	}
 
 	@Override
