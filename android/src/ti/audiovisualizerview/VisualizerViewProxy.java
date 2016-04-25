@@ -55,10 +55,9 @@ public class VisualizerViewProxy extends TiViewProxy implements
 	@Override
 	public TiUIView createView(Activity activity) {
 		Log.d(LCAT, "createView inside Pro");
-		mView = new VisualizerImageView(this);
+		TiUIView mView = new VisualizerImageView(this);
 		mView.getLayoutParams().autoFillsHeight = true;
 		mView.getLayoutParams().autoFillsWidth = true;
-		/* this 3 event will never fired: */
 		return mView;
 	}
 
@@ -68,16 +67,7 @@ public class VisualizerViewProxy extends TiViewProxy implements
 		super.handleCreationDict(options);
 	}
 
-	@Override
-	public void onResume(Activity activity) {
-		Log.d(LCAT, "onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
-		mView.initView();
-	}
-
-	@Override
-	public void onPause(Activity activity) {
-		Log.d(LCAT, "onPause called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
-	}
+	
 
 	public class VisualizerImageView extends TiUIView {
 		public VisualizerImageView(final TiViewProxy proxy) {
@@ -93,12 +83,11 @@ public class VisualizerViewProxy extends TiViewProxy implements
 			}
 			Log.d(LCAT, "starting createSilentMediaPlayer ");
 			// creating view from xml res
-			String packageName = proxy.getActivity().getPackageName();
-			Resources res = proxy.getActivity().getResources();
-			View visualizerContainer;
-			LayoutInflater inflater = LayoutInflater.from(getActivity());
-
-			visualizerContainer = inflater.inflate(
+			Activity activity = proxy.getActivity();
+			String packageName = activity.getPackageName();
+			Resources res = activity.getResources();
+			LayoutInflater inflater = LayoutInflater.from(activity);
+			View visualizerContainer = inflater.inflate(
 					res.getIdentifier("main", "layout", packageName), null);
 			visualizerView = (VisualizerView) visualizerContainer
 					.findViewById(res.getIdentifier("visualizerView", "id",
@@ -120,9 +109,20 @@ public class VisualizerViewProxy extends TiViewProxy implements
 		public void processProperties(KrollDict props) {
 			super.processProperties(props);
 		}
-
+	}
+	
+	@Override
+	public void onResume(Activity activity) {
+		Log.d(LCAT, "onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+		mView.initView();
+	}
+	
+	@Override
+	public void onPause(Activity activity) {
+		Log.d(LCAT, "onPause called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 	}
 
+	/*  INTERFACE */
 	@Kroll.method
 	public void release() {
 		if (visualizerView != null)
