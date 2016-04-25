@@ -10,6 +10,7 @@ package ti.audiovisualizerview;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
+import android.app.Activity;
 
 @Kroll.module(name = "Audiovisualizerview", id = "ti.audiovisualizerview")
 public class AudiovisualizerviewModule extends KrollModule {
@@ -19,5 +20,14 @@ public class AudiovisualizerviewModule extends KrollModule {
 
 	public AudiovisualizerviewModule() {
 		super();
+	}
+
+	@Override
+	
+	public void onResume(Activity activity) {
+		super.onResume(activity);
+	}
+	public void onPause(Activity activity) {
+		super.onPause(activity);
 	}
 }
