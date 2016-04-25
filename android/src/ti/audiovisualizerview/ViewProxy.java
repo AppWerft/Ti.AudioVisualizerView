@@ -30,7 +30,7 @@ import org.appcelerator.titanium.TiLifecycle.OnLifecycleEvent;
 import org.appcelerator.titanium.TiBaseActivity;
 
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
-public class VisualizerViewProxy extends TiViewProxy implements
+public class ViewProxy extends TiViewProxy implements
 		OnLifecycleEvent {
 	// instance of pheelicks view
 	private VisualizerView visualizerView;
@@ -40,10 +40,10 @@ public class VisualizerViewProxy extends TiViewProxy implements
 	TiApplication appContext;
 	Activity activity;
 	
-	TiUIView mView;
+	VisualizerImageView mView;
 	
 	// Constructor
-	public VisualizerViewProxy() {
+	public ViewProxy() {
 		super();
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
@@ -55,7 +55,7 @@ public class VisualizerViewProxy extends TiViewProxy implements
 	@Override
 	public TiUIView createView(Activity activity) {
 		Log.d(LCAT, "createView inside Pro");
-		TiUIView mView = new VisualizerImageView(this);
+		this.mView = new VisualizerImageView(this);
 		mView.getLayoutParams().autoFillsHeight = true;
 		mView.getLayoutParams().autoFillsWidth = true;
 		return mView;
@@ -69,7 +69,7 @@ public class VisualizerViewProxy extends TiViewProxy implements
 
 	
 
-	public class VisualizerImageView extends TiUIView {
+	private class VisualizerImageView extends TiUIView {
 		public VisualizerImageView(final TiViewProxy proxy) {
 			super(proxy);
 			/*
@@ -115,6 +115,7 @@ public class VisualizerViewProxy extends TiViewProxy implements
 	public void onResume(Activity activity) {
 		Log.d(LCAT, "onResume called ≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
 		mView.initView();
+        this.mView.initView();	
 	}
 	
 	@Override
