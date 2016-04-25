@@ -1,14 +1,11 @@
 package ti.audiovisualizerview;
-
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.kroll.KrollModule;
-
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
-
 import android.app.Activity;
 
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
