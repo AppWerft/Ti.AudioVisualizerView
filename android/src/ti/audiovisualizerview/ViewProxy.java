@@ -14,20 +14,14 @@ import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.TiApplication;
-import org.appcelerator.titanium.util.TiConvert;
 import com.pheelicks.visualizer.renderer.*;
 import com.pheelicks.visualizer.VisualizerView;
 import android.app.Activity;
-import android.view.View;
-import android.view.LayoutInflater;
-import android.content.res.*;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
-//import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
-import org.appcelerator.titanium.TiLifecycle.OnLifecycleEvent;
-import org.appcelerator.titanium.TiBaseActivity;
+import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
 
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
 public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
@@ -36,25 +30,23 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	private static final String LCAT = "Pheelicks";
 	final public int DEFAULT_AUDIOSESSIONID = 0;
 	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
+	OnLifecycleEvent lifecyleListener;
 	TiApplication appContext;
-	VisualizerImageView mView; // instance of TiUIView
+	ti.audiovisualizerview.VisualizerImageView mView; // instance of TiUIView
+
 	// Constructor
 	public ViewProxy() {
 		super();
-		appContext = TiApplication.getInstance();
-		Activity activity = appContext.getCurrentActivity();
-		if (activity instanceof TiBaseActivity) {
-			((TiBaseActivity) activity).addOnLifecycleEventListener(this);
-		}
+		
+		
 	}
-
+	
 	@Override
 	public TiUIView createView(Activity activity) {
-		Log.d(LCAT, "createView inside Pro");
-		this.mView = new VisualizerImageView(this);
-		this.mView.getLayoutParams().autoFillsHeight = true;
-		this.mView.getLayoutParams().autoFillsWidth = true;
-		return this.mView;
+		mView = new VisualizerImageView(this);
+		//mView.getLayoutParams().autoFillsHeight = true;
+		//mView.getLayoutParams().autoFillsWidth = true;
+		return mView;
 	}
 
 	// Handle creation options
@@ -62,75 +54,23 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	public void handleCreationDict(KrollDict options) {
 		super.handleCreationDict(options);
 	}
-
-	@Override
-	public void onResume(Activity activity) {
-		Log.d(LCAT, "onResume called <<<<<<<<<<<<<<<<<<<<");
-		Log.d(LCAT, "try to init view");
-		
-		this.mView.init();
-	}
-
 	@Override
 	public void onPause(Activity activity) {
+		super.onPause(activity);
 		this.mView.cleanUp();
 		Log.d(LCAT, "onPause called >>>>>>>>>>>>>>>>>>>>");
 	}
-
 	@Override
-	public void onDestroy(Activity activity) {
-		this.mView.cleanUp();
-		Log.d(LCAT, "onPause called >>>>>>>>>>>>>>>>>>>>");
+	public void onResume(Activity activity) {
+		super.onResume(activity);
+		Log.d(LCAT, "onResume called <<<<<<<<<<<<<<<<<<<<");
+		Log.d(LCAT, "try to init view");
+		this.mView.init();
 	}
-
-	public class VisualizerImageView extends TiUIView {
-		public VisualizerImageView(final TiViewProxy proxy) {
-			super(proxy);
-			/*
-			 * you can bind the visualizer to id=0, this is the mixer out and
-			 * depends on volume , the ids >0 are result of getAudioSessionId()
-			 */
-			if (proxy.hasProperty("audioSessionId")) {
-				audioSessionId = TiConvert.toInt(proxy
-						.getProperty("audioSessionId"));
-				Log.d(LCAT, "audioSessionId " + audioSessionId);
-			}
-			Log.d(LCAT, "starting createSilentMediaPlayer ");
-			// creating view from xml res
-
-		}
-
-		public void init() {
-			Log.d(LCAT, "initView started");
-			Activity activity = proxy.getActivity();
-			String packageName = activity.getPackageName();
-			Resources res = activity.getResources();
-			LayoutInflater inflater = LayoutInflater.from(activity);
-			View visualizerContainer = inflater.inflate(
-					res.getIdentifier("main", "layout", packageName), null);
-			pheelicksView = (VisualizerView) visualizerContainer
-					.findViewById(res.getIdentifier("pheelicksView", "id",
-							packageName));
-			setNativeView(visualizerContainer);
-			pheelicksView.link(audioSessionId); // binding to mixer
-			// out
-			if (proxy.hasListeners("ready")) {
-				Log.d(LCAT, "fireEvent 'ready' ");
-				proxy.fireEvent("ready", new KrollDict());
-			}
-		}
-
-		public void cleanUp() {
-			pheelicksView.release();
-			Log.d(LCAT, "cleanView");
-
-		}
-
-		@Override
-		public void processProperties(KrollDict props) {
-			super.processProperties(props);
-		}
-	}
+	
+	
+	
+	
 
 	/* INTERFACE */
 	@Kroll.method
