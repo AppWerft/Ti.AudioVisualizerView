@@ -22,12 +22,5 @@ public class AudiovisualizerviewModule extends KrollModule {
 		super();
 	}
 
-	@Override
 	
-	public void onResume(Activity activity) {
-		super.onResume(activity);
-	}
-	public void onPause(Activity activity) {
-		super.onPause(activity);
-	}
 }

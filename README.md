@@ -19,20 +19,12 @@ For usage in Marshmellow devices, you need AUDIO_RECORDING permission on runtime
     var visualizerView = Visualizer.createVisualizerView({
         width : 500,
         audioSessionId :0,
+lifecycleContainer : window 
         height : 200
     });
     visualizerView.addEventListener('ready', function() {
-        visualizerView.addLineRenderer({
-            basicStrokeWidth : 5,
-            basicColor : "#800000ff",
-            flashStrokeWidth : 5,
-            flashColor : "#800000ff"
-        });
-        visualizerView.addBarGraphRenderers({
-            color : "#800000ff",
-            bars  : 12,
-            direction : 'top'
-        });
+        visualizerView.addLineRenderer();
+        visualizerView.addBarGraphRenderers();
     });
     window.add(visualizerView);
     Ti.Media.createAudioPlayer({

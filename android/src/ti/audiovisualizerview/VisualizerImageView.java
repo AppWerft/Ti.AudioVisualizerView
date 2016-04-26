@@ -1,7 +1,7 @@
 package ti.audiovisualizerview;
+
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.common.Log;
-import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.util.TiConvert;
@@ -18,58 +18,19 @@ import android.view.LayoutInflater;
 import com.pheelicks.visualizer.VisualizerView;
 import com.pheelicks.visualizer.renderer.*;
 
-public class VisualizerImageView extends TiUIView implements OnLifecycleEvent{
-	private static final String LCAT = "Pheelicks";
+public class VisualizerImageView extends TiUIView {
+
+	private static final String LCAT = "PheelicksView";
+
 	final public int DEFAULT_AUDIOSESSIONID = 0;
 	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
-	
-	@Override
-	public void onPause(Activity activity) {
-		this.cleanUp();
-		Log.d(LCAT, "onPause called >>>>>>>>>>>>>>>>>>>>");
-	}
 
-	@Override
-	public void onResume(Activity activity) {
-		Log.d(LCAT, "onResume called <<<<<<<<<<<<<<<<<<<<");
-		this.init();
-	}
-	
-	@Override
-	public void onStart(Activity activity) {
-		Log.d(LCAT, "onStart called <<<<<<<<<<<<<<<<<<<<");
-		this.init();
-	}
-
-	@Override
-	public void onStop(Activity activity) {
-		Log.d(LCAT, "onStop called <<<<<<<<<<<<<<<<<<<<");
-		this.cleanUp();
-
-		
-	}
-	@Override
-	public void onDestroy(Activity activity) {
-		Log.d(LCAT, "onDestroy called <<<<<<<<<<<<<<<<<<<<");
-		this.cleanUp();
-	}
-	
 	public VisualizerView pheelicksView;
 
 	public VisualizerImageView(final TiViewProxy proxy) {
 		super(proxy);
-		/*
-		 * you can bind the visualizer to id=0, this is the mixer out and
-		 * depends on volume , the ids >0 are result of getAudioSessionId()
-		 */
-		if (proxy.hasProperty("audioSessionId")) {
-			audioSessionId = TiConvert.toInt(proxy
-					.getProperty("audioSessionId"));
-			Log.d(LCAT, "audioSessionId " + audioSessionId);
-		}
-
-		// creating view from xml res
-		Log.d(LCAT, "initView started");
+		Log.d(LCAT,
+				"VisualizerImageView started  °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
 		Activity activity = proxy.getActivity();
 		String packageName = activity.getPackageName();
 		Resources res = activity.getResources();
@@ -78,9 +39,9 @@ public class VisualizerImageView extends TiUIView implements OnLifecycleEvent{
 				res.getIdentifier("main", "layout", packageName), null);
 		pheelicksView = (VisualizerView) visualizerContainer.findViewById(res
 				.getIdentifier("pheelicksView", "id", packageName));
+		
 		setNativeView(visualizerContainer);
-		this.init();
-
+		init();
 	}
 
 	public void release() {
@@ -99,7 +60,7 @@ public class VisualizerImageView extends TiUIView implements OnLifecycleEvent{
 
 	public void addLineRenderer() {
 		Paint linePaint = new Paint();
-		linePaint.setStrokeWidth(1f);
+		linePaint.setStrokeWidth(3f);
 		linePaint.setAntiAlias(true);
 		linePaint.setColor(Color.argb(88, 0, 128, 255));
 
@@ -149,17 +110,35 @@ public class VisualizerImageView extends TiUIView implements OnLifecycleEvent{
 	}
 
 	public void init() {
-		Log.d(LCAT, "init started ======= ");
-		pheelicksView.link(audioSessionId); // binding to mixer
+		
+		if (proxy.hasProperty("audioSessionId")) {
+			audioSessionId = TiConvert.toInt(proxy
+					.getProperty("audioSessionId"));
+			Log.d(LCAT, "audioSessionId for pheelicks is still "
+					+ audioSessionId);
+			
+			
+			
+			pheelicksView.link(audioSessionId); // binding to mixer
+		} else
+			pheelicksView.link(0);
+		Log.d(LCAT, "try to send 'ready' event  ↓↓↓");	
 		if (proxy.hasListeners("ready")) {
 			Log.d(LCAT, "fireEvent 'ready' ");
 			proxy.fireEvent("ready", new KrollDict());
+		} else {
+			Log.e(LCAT, "cannot fireEvent 'ready' ");
 		}
 	}
 
 	public void cleanUp() {
-		pheelicksView.release();
-		Log.d(LCAT, "cleanView");
+		if (pheelicksView != null) {
+			// pheelicksView.clearRenderers();
+			// pheelicksView.release();
+
+			Log.d(LCAT, "cleanView after pause");
+		} else
+			Log.e(LCAT, "cannot cleanView ");
 	}
 
 	@Override
