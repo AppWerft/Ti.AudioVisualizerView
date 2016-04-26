@@ -16,17 +16,19 @@ For usage in Marshmellow devices, you need AUDIO_RECORDING permission on runtime
 ! function() {
     var Visualizer = require('ti.audiovisualizerview');
     var window = Ti.Ui.createWindow();
-    var visualizerView = Visualizer.createVisualizerView({
-        width : 500,
-        audioSessionId :0,
-lifecycleContainer : window 
-        height : 200
+    window.addEventListener('open',function) {
+        var visualizerView = Visualizer.createVisualizerView({
+            width : 500,
+            audioSessionId :0,
+            lifecycleContainer : window 
+            height : 200
+        });
+        visualizerView.addEventListener('ready', function() {
+            visualizerView.addLineRenderer();
+            visualizerView.addBarGraphRenderers();
+        });
+        window.add(visualizerView);
     });
-    visualizerView.addEventListener('ready', function() {
-        visualizerView.addLineRenderer();
-        visualizerView.addBarGraphRenderers();
-    });
-    window.add(visualizerView);
     Ti.Media.createAudioPlayer({
         url : "http://audio.scdn.arkena.com/11016/fip-midfi128.mp3"
     }).start();
