@@ -1,9 +1,11 @@
 package ti.audiovisualizerview;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.common.Log;
+import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.util.TiConvert;
+
 import android.app.Activity;
 import android.content.res.*;
 import android.graphics.Color;
@@ -12,14 +14,46 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff.Mode;
 import android.view.View;
 import android.view.LayoutInflater;
+
 import com.pheelicks.visualizer.VisualizerView;
 import com.pheelicks.visualizer.renderer.*;
 
-public class VisualizerImageView extends TiUIView {
+public class VisualizerImageView extends TiUIView implements OnLifecycleEvent{
 	private static final String LCAT = "Pheelicks";
 	final public int DEFAULT_AUDIOSESSIONID = 0;
 	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
+	
+	@Override
+	public void onPause(Activity activity) {
+		this.cleanUp();
+		Log.d(LCAT, "onPause called >>>>>>>>>>>>>>>>>>>>");
+	}
 
+	@Override
+	public void onResume(Activity activity) {
+		Log.d(LCAT, "onResume called <<<<<<<<<<<<<<<<<<<<");
+		this.init();
+	}
+	
+	@Override
+	public void onStart(Activity activity) {
+		Log.d(LCAT, "onStart called <<<<<<<<<<<<<<<<<<<<");
+		this.init();
+	}
+
+	@Override
+	public void onStop(Activity activity) {
+		Log.d(LCAT, "onStop called <<<<<<<<<<<<<<<<<<<<");
+		this.cleanUp();
+
+		
+	}
+	@Override
+	public void onDestroy(Activity activity) {
+		Log.d(LCAT, "onDestroy called <<<<<<<<<<<<<<<<<<<<");
+		this.cleanUp();
+	}
+	
 	public VisualizerView pheelicksView;
 
 	public VisualizerImageView(final TiViewProxy proxy) {
