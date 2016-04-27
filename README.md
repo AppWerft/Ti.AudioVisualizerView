@@ -25,7 +25,10 @@ For usage in Marshmellow devices, you need AUDIO_RECORDING permission on runtime
         });
         visualizerView.addEventListener('ready', function() {
             visualizerView.addLineRenderer();
-            visualizerView.addBarGraphRenderers();
+            visualizerView.addBarGraphRenderer({
+                color : '#326598',
+                width : 32.0,
+            });
         });
         window.add(visualizerView);
     });

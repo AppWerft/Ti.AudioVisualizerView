@@ -2,6 +2,7 @@ package ti.audiovisualizerview;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.common.Log;
+import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
 import org.appcelerator.titanium.util.TiConvert;
@@ -14,6 +15,9 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff.Mode;
 import android.view.View;
 import android.view.LayoutInflater;
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 
 import com.pheelicks.visualizer.VisualizerView;
 import com.pheelicks.visualizer.renderer.*;
@@ -39,7 +43,7 @@ public class VisualizerImageView extends TiUIView {
 				res.getIdentifier("main", "layout", packageName), null);
 		pheelicksView = (VisualizerView) visualizerContainer.findViewById(res
 				.getIdentifier("pheelicksView", "id", packageName));
-		
+
 		setNativeView(visualizerContainer);
 		init();
 	}
@@ -87,21 +91,16 @@ public class VisualizerImageView extends TiUIView {
 			Log.d(LCAT, "Error: pheelicksView is null");
 	}
 
-	public void addBarGraphRenderers() {
-		Log.d(LCAT, "starting addBarGraphRenderers ");
-		/*
-		 * Paint paint = new Paint(); paint.setStrokeWidth(50f);
-		 * paint.setAntiAlias(true); paint.setColor(Color.argb(200, 56, 138,
-		 * 252)); BarGraphRenderer barGraphRendererBottom = new
-		 * BarGraphRenderer(16, paint, false);
-		 * pheelicksView.addRenderer(barGraphRendererBottom);
-		 */
-		Paint paint2 = new Paint();
-		paint2.setStrokeWidth(12f);
-		paint2.setAntiAlias(true);
-		paint2.setColor(Color.argb(200, 56, 138, 252));
-		BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(4, paint2,
-				false);
+	public void addBarGraphRenderer(float width, int color, int devisions) {
+		Paint paint = new Paint();
+		float mWidth = dipToPixels(width);
+		float height = 50;
+		Log.d(LCAT, "starting addBarGraphRenderers " + mWidth);	
+		paint.setStrokeWidth(mWidth);
+		paint.setAntiAlias(true);
+		paint.setColor(color);
+		BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(32, paint,
+				false,height);
 		Log.d(LCAT, "adding addBarGraphRenderers ========== ");
 		if (pheelicksView != null)
 			pheelicksView.addRenderer(barGraphRendererTop);
@@ -110,19 +109,15 @@ public class VisualizerImageView extends TiUIView {
 	}
 
 	public void init() {
-		
 		if (proxy.hasProperty("audioSessionId")) {
 			audioSessionId = TiConvert.toInt(proxy
 					.getProperty("audioSessionId"));
 			Log.d(LCAT, "audioSessionId for pheelicks is still "
 					+ audioSessionId);
-			
-			
-			
 			pheelicksView.link(audioSessionId); // binding to mixer
 		} else
 			pheelicksView.link(0);
-		Log.d(LCAT, "try to send 'ready' event  ↓↓↓");	
+		Log.d(LCAT, "try to send 'ready' event  ↓↓↓");
 		if (proxy.hasListeners("ready")) {
 			Log.d(LCAT, "fireEvent 'ready' ");
 			proxy.fireEvent("ready", new KrollDict());
@@ -144,5 +139,12 @@ public class VisualizerImageView extends TiUIView {
 	@Override
 	public void processProperties(KrollDict props) {
 		super.processProperties(props);
+	}
+
+	public static float dipToPixels( float dipValue) {
+		Context context = TiApplication.getInstance();
+		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue,
+				context.getResources().getDisplayMetrics());
+
 	}
 }

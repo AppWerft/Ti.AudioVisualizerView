@@ -6,10 +6,16 @@ import org.appcelerator.kroll.common.Log;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiUIView;
+import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
+import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.titanium.TiC;
+
 //import org.appcelerator.titanium.TiLifecycle.OnLifecycleEvent;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.TypedValue;
 
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
 public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
@@ -52,8 +58,21 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	}
 
 	@Kroll.method
-	public void addBarGraphRenderers() {
-		mView.addBarGraphRenderers();
+	public void addBarGraphRenderer(@Kroll.argument(optional = true) KrollDict d) {
+		int mColor = 0;
+		float mWidth = 10;
+		if (d != null) {
+			if (d.containsKey(TiC.PROPERTY_COLOR)) {
+
+				mColor = TiConvert.toColor(d, TiC.PROPERTY_COLOR);
+				Log.d(LCAT, "COLOR ================" + mColor);
+
+			}
+			if (d.containsKey(TiC.PROPERTY_WIDTH)) {
+				mWidth = TiConvert.toFloat(d, TiC.PROPERTY_WIDTH);
+			}
+		}
+		mView.addBarGraphRenderer(mWidth, mColor, 16);
 	}
 
 	@Override
@@ -109,6 +128,7 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 		else
 			Log.e(LCAT, "cannot call reinit");
 	}
+
 	public void onStart(Activity activity) {
 		Log.d(LCAT, "onStart ======");
 		super.onStart(activity);
@@ -117,5 +137,12 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 			mView.init();
 		else
 			Log.e(LCAT, "cannot call reinit");
+	}
+
+	public static float dipToPixels(float dipValue) {
+		Context context = TiApplication.getInstance();
+		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue,
+				context.getResources().getDisplayMetrics());
+
 	}
 }
