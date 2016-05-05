@@ -34,7 +34,7 @@ import com.pheelicks.visualizer.renderer.Renderer;
  */
 public class VisualizerView extends View {
 	private static final String LTAG = "Pheelicks";
-	
+
 	private byte[] mBytes;
 	private byte[] mFFTBytes;
 	private Rect mRect = new Rect();
@@ -68,9 +68,9 @@ public class VisualizerView extends View {
 																// quickly the
 																// image fades
 		mFadePaint.setXfermode(new PorterDuffXfermode(Mode.MULTIPLY));
-		
+
 		mRenderers = new HashSet<Renderer>();
-		Log.d(LTAG,"Init");
+		Log.d(LTAG, "Init VisualizerView");
 	}
 
 	/**
@@ -82,7 +82,8 @@ public class VisualizerView extends View {
 	public void link(int audioSessionId) {
 		// Create the Visualizer object and attach it to our media player.
 		mVisualizer = new Visualizer(audioSessionId);
-		Log.d(LTAG,"successfull visualizer linked on audioSessionId " + audioSessionId);
+		Log.d(LTAG, "successfull visualizer linked on audioSessionId "
+				+ audioSessionId);
 		mVisualizer.setEnabled(false);
 		mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
 		// Pass through Visualizer data to VisualizerView
@@ -105,12 +106,13 @@ public class VisualizerView extends View {
 
 		// Enabled Visualizer and disable when we're done with the stream
 		mVisualizer.setEnabled(true);
-		/*player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-			@Override
-			public void onCompletion(MediaPlayer mediaPlayer) {
-				mVisualizer.setEnabled(false);
-			}
-		});*/
+		/*
+		 * player.setOnCompletionListener(new MediaPlayer.OnCompletionListener()
+		 * {
+		 * 
+		 * @Override public void onCompletion(MediaPlayer mediaPlayer) {
+		 * mVisualizer.setEnabled(false); } });
+		 */
 	}
 
 	public void addRenderer(Renderer renderer) {

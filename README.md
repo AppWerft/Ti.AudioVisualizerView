@@ -17,7 +17,7 @@ For usage in Marshmellow devices, you need AUDIO_RECORDING permission on runtime
     var Visualizer = require('ti.audiovisualizerview');
     var window = Ti.Ui.createWindow();
     window.addEventListener('open',function) {
-        var visualizerView = Visualizer.createVisualizerView({
+        var visualizerView = Visualizer.createView({
             width : 500,
             audioSessionId :0,
             lifecycleContainer : window 

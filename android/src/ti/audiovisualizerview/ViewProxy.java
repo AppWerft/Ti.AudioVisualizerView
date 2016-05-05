@@ -25,6 +25,7 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 
 	public ViewProxy() {
 		super();
+		Log.d(LCAT, "ViewProxy constructor ================");
 	}
 
 	@Override
