@@ -64,12 +64,12 @@ public class VisualizerImageView extends TiUIView {
 
 	public void addLineRenderer() {
 		Paint linePaint = new Paint();
-		linePaint.setStrokeWidth(3f);
+		linePaint.setStrokeWidth(1f);
 		linePaint.setAntiAlias(true);
 		linePaint.setColor(Color.argb(88, 0, 128, 255));
 
 		Paint lineFlashPaint = new Paint();
-		lineFlashPaint.setStrokeWidth(5f);
+		lineFlashPaint.setStrokeWidth(3f);
 		lineFlashPaint.setAntiAlias(true);
 		lineFlashPaint.setColor(Color.argb(188, 255, 255, 255));
 		LineRenderer lineRenderer = new LineRenderer(linePaint, lineFlashPaint,
@@ -93,7 +93,7 @@ public class VisualizerImageView extends TiUIView {
 
 	public void addBarGraphRenderer(float width, int color, int devisions) {
 		Paint paint = new Paint();
-		float mWidth = dipToPixels(width);
+		float mWidth = width;
 		float height = 50;
 		Log.d(LCAT, "starting addBarGraphRenderers " + mWidth);	
 		paint.setStrokeWidth(mWidth);
