@@ -2,7 +2,7 @@ package ti.audiovisualizerview;
 
 //import org.appcelerator.titanium.TiLifecycle.OnLifecycleEvent;
 
-public class LinegraphDict {
+public class CirclegraphDict {
 	private int color;
 	private float width;
 
@@ -22,7 +22,7 @@ public class LinegraphDict {
 		this.width = width;
 	}
 
-	public LinegraphDict() {
+	public CirclegraphDict() {
 		super();
 	}
 }
