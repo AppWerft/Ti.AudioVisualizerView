@@ -10,11 +10,12 @@ package ti.audiovisualizerview;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
-import android.content.Context;
-import org.appcelerator.titanium.TiApplication;
-import android.media.MediaPlayer;
-import com.pheelicks.utils.TunnelPlayerWorkaround;
 import org.appcelerator.kroll.common.Log;
+import org.appcelerator.titanium.TiApplication;
+
+import android.content.Context;
+
+import com.pheelicks.utils.TunnelPlayerWorkaround;
 
 //import android.app.Activity;
 
@@ -23,7 +24,7 @@ public class AudiovisualizerviewModule extends KrollModule {
 
 	@Kroll.constant
 	public static final int AUDIOSESSION_OUTPUTMIX = 0;
-	public static final String LCAT = "Pheelicks";
+	public static final String LCAT = "PheelicksM";
 
 	public AudiovisualizerviewModule() {
 		super();

@@ -23,12 +23,9 @@ import com.pheelicks.visualizer.VisualizerView;
 import com.pheelicks.visualizer.renderer.*;
 
 public class VisualizerImageView extends TiUIView {
-
 	private static final String LCAT = "PheelicksView";
-
 	final public int DEFAULT_AUDIOSESSIONID = 0;
 	public int audioSessionId = DEFAULT_AUDIOSESSIONID;
-
 	public VisualizerView pheelicksView;
 
 	public VisualizerImageView(final TiViewProxy proxy) {
@@ -43,7 +40,6 @@ public class VisualizerImageView extends TiUIView {
 				res.getIdentifier("main", "layout", packageName), null);
 		pheelicksView = (VisualizerView) visualizerContainer.findViewById(res
 				.getIdentifier("pheelicksView", "id", packageName));
-
 		setNativeView(visualizerContainer);
 		init();
 	}
@@ -67,7 +63,6 @@ public class VisualizerImageView extends TiUIView {
 		linePaint.setStrokeWidth(1f);
 		linePaint.setAntiAlias(true);
 		linePaint.setColor(Color.argb(88, 0, 128, 255));
-
 		Paint lineFlashPaint = new Paint();
 		lineFlashPaint.setStrokeWidth(3f);
 		lineFlashPaint.setAntiAlias(true);
@@ -95,12 +90,12 @@ public class VisualizerImageView extends TiUIView {
 		Paint paint = new Paint();
 		float mWidth = width;
 		float height = 50;
-		Log.d(LCAT, "starting addBarGraphRenderers " + mWidth);	
+		Log.d(LCAT, "starting addBarGraphRenderers " + mWidth);
 		paint.setStrokeWidth(mWidth);
 		paint.setAntiAlias(true);
 		paint.setColor(color);
 		BarGraphRenderer barGraphRendererTop = new BarGraphRenderer(32, paint,
-				false,height);
+				false, height);
 		Log.d(LCAT, "adding addBarGraphRenderers ========== ");
 		if (pheelicksView != null)
 			pheelicksView.addRenderer(barGraphRendererTop);
@@ -117,12 +112,8 @@ public class VisualizerImageView extends TiUIView {
 			pheelicksView.link(audioSessionId); // binding to mixer
 		} else
 			pheelicksView.link(0);
-		Log.d(LCAT, "try to send 'ready' event  ↓↓↓");
 		if (proxy.hasListeners("ready")) {
-			Log.d(LCAT, "fireEvent 'ready' ");
 			proxy.fireEvent("ready", new KrollDict());
-		} else {
-			Log.e(LCAT, "cannot fireEvent 'ready' ");
 		}
 	}
 
@@ -141,7 +132,7 @@ public class VisualizerImageView extends TiUIView {
 		super.processProperties(props);
 	}
 
-	public static float dipToPixels( float dipValue) {
+	public static float dipToPixels(float dipValue) {
 		Context context = TiApplication.getInstance();
 		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue,
 				context.getResources().getDisplayMetrics());

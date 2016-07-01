@@ -3,25 +3,24 @@ package ti.audiovisualizerview;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
-import org.appcelerator.kroll.KrollModule;
-import org.appcelerator.titanium.proxy.TiViewProxy;
-import org.appcelerator.titanium.view.TiUIView;
-import org.appcelerator.titanium.util.TiConvert;
-import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiC;
-
+import org.appcelerator.titanium.TiContext.OnLifecycleEvent;
+import org.appcelerator.titanium.proxy.TiViewProxy;
+import org.appcelerator.titanium.util.TiConvert;
+import org.appcelerator.titanium.view.TiUIView;
 //import org.appcelerator.titanium.TiLifecycle.OnLifecycleEvent;
-
 import android.app.Activity;
+
 import android.content.Context;
+import android.graphics.Color;
 import android.util.TypedValue;
 
 @Kroll.proxy(creatableInModule = AudiovisualizerviewModule.class)
 public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
-	private static final String LCAT = "PheelicksViewProxy";
-
+	private static final String LCAT = "PheelicksVP";
 	private VisualizerImageView mView; // instance of TiUIView
+	BargraphDict bargraphDict = null;
 
 	public ViewProxy() {
 		super();
@@ -30,12 +29,17 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 
 	@Override
 	public TiUIView createView(Activity activity) {
-		Log.d(LCAT, "VisualizerView mView start creating ================");
 		mView = new VisualizerImageView(this);
-		Log.d(LCAT, "VisualizerView mView created ================");
 		mView.getLayoutParams().autoFillsHeight = true;
 		mView.getLayoutParams().autoFillsWidth = true;
 		return mView;
+	}
+
+	public void startBargraphRenderer() {
+		if (bargraphDict != null && mView != null) {
+			mView.addBarGraphRenderer(bargraphDict.getWidth(),
+					bargraphDict.getColor(), 16);
+		}
 	}
 
 	@Kroll.method
@@ -64,10 +68,8 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 		float mWidth = 10;
 		if (d != null) {
 			if (d.containsKey(TiC.PROPERTY_COLOR)) {
-
 				mColor = TiConvert.toColor(d, TiC.PROPERTY_COLOR);
 				Log.d(LCAT, "COLOR ================" + mColor);
-
 			}
 			if (d.containsKey(TiC.PROPERTY_WIDTH)) {
 				mWidth = TiConvert.toFloat(d, TiC.PROPERTY_WIDTH);
@@ -77,13 +79,18 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	}
 
 	@Override
-	public void handleCreationDict(KrollDict options) {
-		super.handleCreationDict(options);
-	}
-
-	@Override
-	public void handleCreationArgs(KrollModule createdInModule, Object[] args) {
-		super.handleCreationArgs(createdInModule, args);
+	public void handleCreationDict(KrollDict args) {
+		if (args.containsKeyAndNotNull("bargraphRenderer")) {
+			KrollDict bargraphRenderer = args.getKrollDict("bargraphRenderer");
+			bargraphDict = new BargraphDict();
+			if (bargraphRenderer.containsKeyAndNotNull("color"))
+				bargraphDict.setColor(Color.parseColor(bargraphRenderer
+						.getString("color")));
+			if (bargraphRenderer.containsKeyAndNotNull("width"))
+				bargraphDict.setWidth(TiConvert.toFloat(bargraphRenderer
+						.getString("width")));
+		}
+		super.handleCreationDict(args);
 	}
 
 	@Override
@@ -122,8 +129,6 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	public void onResume(Activity activity) {
 		Log.d(LCAT, "onResume ======");
 		super.onResume(activity);
-		// mView=null;
-		Log.d(LCAT, "onResume called <<<<<<<<<<<<<<<<<<<< try to reinit");
 		if (mView != null)
 			mView.init();
 		else
@@ -131,9 +136,7 @@ public class ViewProxy extends TiViewProxy implements OnLifecycleEvent {
 	}
 
 	public void onStart(Activity activity) {
-		Log.d(LCAT, "onStart ======");
 		super.onStart(activity);
-		// mView=null;
 		if (mView != null)
 			mView.init();
 		else
