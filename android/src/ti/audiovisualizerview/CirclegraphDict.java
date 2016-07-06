@@ -1,10 +1,17 @@
 package ti.audiovisualizerview;
 
-//import org.appcelerator.titanium.TiLifecycle.OnLifecycleEvent;
-
 public class CirclegraphDict {
 	private int color;
-	private float width;
+	private float strokeWidth;
+	boolean cycleColor = true;
+
+	public boolean isCycleColor() {
+		return cycleColor;
+	}
+
+	public void setCycleColor(boolean cycleColor) {
+		this.cycleColor = cycleColor;
+	}
 
 	public int getColor() {
 		return color;
@@ -14,12 +21,12 @@ public class CirclegraphDict {
 		this.color = color;
 	}
 
-	public float getWidth() {
-		return width;
+	public float getStrokeWidth() {
+		return strokeWidth;
 	}
 
-	public void setWidth(float width) {
-		this.width = width;
+	public void setStrokeWidth(float strokeWidth) {
+		this.strokeWidth = strokeWidth;
 	}
 
 	public CirclegraphDict() {

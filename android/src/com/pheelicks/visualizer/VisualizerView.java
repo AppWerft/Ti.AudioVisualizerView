@@ -19,11 +19,9 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-
 import android.media.audiofx.Visualizer;
-import android.util.AttributeSet;
-import android.view.View;
 import android.util.Log;
+import android.view.View;
 
 import com.pheelicks.visualizer.renderer.Renderer;
 
@@ -45,17 +43,9 @@ public class VisualizerView extends View {
 	private Paint mFlashPaint = new Paint();
 	private Paint mFadePaint = new Paint();
 
-	public VisualizerView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs);
-		init();
-	}
-
-	public VisualizerView(Context context, AttributeSet attrs) {
-		this(context, attrs, 0);
-	}
-
 	public VisualizerView(Context context) {
-		this(context, null, 0);
+		super(context);
+		init();
 	}
 
 	private void init() {
@@ -68,9 +58,7 @@ public class VisualizerView extends View {
 																// quickly the
 																// image fades
 		mFadePaint.setXfermode(new PorterDuffXfermode(Mode.MULTIPLY));
-
 		mRenderers = new HashSet<Renderer>();
-		Log.d(LTAG, "Init VisualizerView");
 	}
 
 	/**
